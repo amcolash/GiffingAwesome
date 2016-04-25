@@ -31,9 +31,15 @@ var ionicApp = angular.module('starter', ['ionic'])
       $http.get("http://api.giphy.com/v1/gifs/search?q=" +
           $scope.search + "&api_key=dc6zaTOxFJmzC").then(function(response) {
         var data = response.data.data;
+        console.log(data);
+
         $scope.images = [];
         for(var i = 0; i < data.length; i++) {
-          $scope.images.push({id: i, src: data[i].images.fixed_height_small.url});
+          if ($scope.hq) {
+            $scope.images.push({id: i, src: data[i].images.fixed_height.url, url: data[i].url});
+          } else {
+            $scope.images.push({id: i, src: data[i].images.fixed_height_small.url, url: data[i].url});
+          }
         }
       });
     }

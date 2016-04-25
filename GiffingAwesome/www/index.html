@@ -29,25 +29,30 @@
       </ion-header-bar>
 
       <ion-content ng-controller="ExampleController" ng-init="loadImages()">
-        <label class="item item-input">
-          <input type="text" ng-model="search" ng-change="loadImages()" placeholder="Search">
-        </label>
+        <div class="list list-inset">
+          <label class="item item-input">
+            <i class="icon ion-search placeholder-icon"></i>
+            <input type="text" ng-model="search" ng-change="loadImages()" placeholder="Search">
+          </label>
+        </div>
+
+        <ion-toggle ng-model="hq" ng-change="loadImages()" toggle-class="toggle-calm">High Quality</ion-toggle>
 
         <div class="row" ng-repeat="image in images" ng-if="$index % 5 === 0">
           <div class="col col-20" ng-if="$index < images.length">
-            <img ng-src="{{images[$index].src}}" width="100%" />
+            <a href={{images[$index].url}}><img ng-src="{{images[$index].src}}" width="100%" /></a>
           </div>
           <div class="col col-20" ng-if="$index + 1 < images.length">
-            <img ng-src="{{images[$index + 1].src}}" width="100%" />
+            <a href={{images[$index].url}}><img ng-src="{{images[$index + 1].src}}" width="100%" /></a>
           </div>
           <div class="col col-20" ng-if="$index + 2 < images.length">
-            <img ng-src="{{images[$index + 2].src}}" width="100%" />
+            <a href={{images[$index].url}}><img ng-src="{{images[$index + 2].src}}" width="100%" /></a>
           </div>
           <div class="col col-20" ng-if="$index + 3 < images.length">
-            <img ng-src="{{images[$index + 3].src}}" width="100%" />
+            <a href={{images[$index].url}}><img ng-src="{{images[$index + 3].src}}" width="100%" /></a>
           </div>
           <div class="col col-20" ng-if="$index + 4 < images.length">
-            <img ng-src="{{images[$index + 4].src}}" width="100%" />
+            <a href={{images[$index].url}}><img ng-src="{{images[$index + 4].src}}" width="100%" /></a>
           </div>
         </div>
       </ion-content>
