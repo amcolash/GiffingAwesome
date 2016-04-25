@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title></title>
+
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
+
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
+
+    <!-- your app's js -->
+    <script src="js/app.js"></script>
+  </head>
+  <body ng-app="starter">
+    <ion-pane>
+      <ion-header-bar class="bar-dark">
+        <button class="button icon ion-navicon"></button>
+        <h1 class="title">Giffing Awesome</h1>
+      </ion-header-bar>
+
+      <ion-content ng-controller="ExampleController" ng-init="loadImages()">
+        <label class="item item-input">
+          <input type="text" ng-model="search" ng-change="loadImages()" placeholder="Search">
+        </label>
+
+        <div class="row" ng-repeat="image in images" ng-if="$index % 5 === 0">
+          <div class="col col-20" ng-if="$index < images.length">
+            <img ng-src="{{images[$index].src}}" width="100%" />
+          </div>
+          <div class="col col-20" ng-if="$index + 1 < images.length">
+            <img ng-src="{{images[$index + 1].src}}" width="100%" />
+          </div>
+          <div class="col col-20" ng-if="$index + 2 < images.length">
+            <img ng-src="{{images[$index + 2].src}}" width="100%" />
+          </div>
+          <div class="col col-20" ng-if="$index + 3 < images.length">
+            <img ng-src="{{images[$index + 3].src}}" width="100%" />
+          </div>
+          <div class="col col-20" ng-if="$index + 4 < images.length">
+            <img ng-src="{{images[$index + 4].src}}" width="100%" />
+          </div>
+        </div>
+      </ion-content>
+
+    </ion-pane>
+  </body>
+</html>
