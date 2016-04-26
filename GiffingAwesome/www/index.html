@@ -14,49 +14,18 @@
 
     <!-- ionic/angularjs js -->
     <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <script src="https://npmcdn.com/masonry-layout@4.0/dist/masonry.pkgd.js"></script>
 
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
 
     <!-- your app's js -->
     <script src="js/app.js"></script>
+    <script src="js/controllers.js"></script>
   </head>
+
   <body ng-app="starter">
-    <ion-pane>
-      <ion-header-bar class="bar-dark">
-        <button class="button icon ion-navicon"></button>
-        <h1 class="title">Giffing Awesome</h1>
-      </ion-header-bar>
-
-      <ion-content ng-controller="ExampleController" ng-init="loadImages()">
-        <div class="list list-inset">
-          <label class="item item-input">
-            <i class="icon ion-search placeholder-icon"></i>
-            <input type="text" ng-model="search" ng-change="loadImages()" placeholder="Search">
-          </label>
-        </div>
-
-        <ion-toggle ng-model="hq" ng-change="loadImages()" toggle-class="toggle-calm">High Quality</ion-toggle>
-
-        <div class="row" ng-repeat="image in images" ng-if="$index % 5 === 0">
-          <div class="col col-20" ng-if="$index < images.length">
-            <a href={{images[$index].url}}><img ng-src="{{images[$index].src}}" width="100%" /></a>
-          </div>
-          <div class="col col-20" ng-if="$index + 1 < images.length">
-            <a href={{images[$index].url}}><img ng-src="{{images[$index + 1].src}}" width="100%" /></a>
-          </div>
-          <div class="col col-20" ng-if="$index + 2 < images.length">
-            <a href={{images[$index].url}}><img ng-src="{{images[$index + 2].src}}" width="100%" /></a>
-          </div>
-          <div class="col col-20" ng-if="$index + 3 < images.length">
-            <a href={{images[$index].url}}><img ng-src="{{images[$index + 3].src}}" width="100%" /></a>
-          </div>
-          <div class="col col-20" ng-if="$index + 4 < images.length">
-            <a href={{images[$index].url}}><img ng-src="{{images[$index + 4].src}}" width="100%" /></a>
-          </div>
-        </div>
-      </ion-content>
-
-    </ion-pane>
+    <ion-nav-view></ion-nav-view>
   </body>
+
 </html>

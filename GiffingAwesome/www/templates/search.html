@@ -1,0 +1,23 @@
+<ion-view title="Search">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-content class="has-header" ng-init="loadImages()">
+
+    <div class="list list-inset">
+      <label class="item item-input">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input type="text" ng-model="$parent.search" ng-change="loadImages()" placeholder="Search">
+      </label>
+    </div>
+
+    <ion-toggle ng-model="$parent.hq" ng-change="loadImages()" toggle-class="toggle-calm">High Quality</ion-toggle>
+
+    <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'>
+      <a ng-repeat="image in images" class="grid-item" href={{images[$index].url}}>
+        <img ng-src="{{images[$index].src}}"/>
+      </a>
+    </div>
+
+  </ion-content>
+</ion-view>

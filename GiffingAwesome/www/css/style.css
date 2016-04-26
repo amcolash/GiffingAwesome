@@ -1,1 +1,7 @@
-/* Empty. Add your own CSS if you like */
+img {
+  height: 150px;
+}
+
+.grid {
+  padding: 16px;
+}

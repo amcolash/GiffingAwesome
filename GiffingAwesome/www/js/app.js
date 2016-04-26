@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var ionicApp = angular.module('starter', ['ionic'])
+var ionicApp = angular.module('starter', ['ionic', 'starter.controllers'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -23,24 +23,35 @@ var ionicApp = angular.module('starter', ['ionic'])
   });
 })
 
-.controller("ExampleController", function($scope, $http) {
-    $scope.images = [];
-    $scope.search = "cats";
+.config(function($stateProvider, $urlRouterProvider) {
+  $stateProvider
 
-    $scope.loadImages = function() {
-      $http.get("http://api.giphy.com/v1/gifs/search?q=" +
-          $scope.search + "&api_key=dc6zaTOxFJmzC").then(function(response) {
-        var data = response.data.data;
-        console.log(data);
+    .state('app', {
+      url: "/app",
+      abstract: true,
+      templateUrl: "templates/menu.html",
+      controller: 'AppCtrl'
+    })
 
-        $scope.images = [];
-        for(var i = 0; i < data.length; i++) {
-          if ($scope.hq) {
-            $scope.images.push({id: i, src: data[i].images.fixed_height.url, url: data[i].url});
-          } else {
-            $scope.images.push({id: i, src: data[i].images.fixed_height_small.url, url: data[i].url});
-          }
+    .state('app.search', {
+      url: "/search",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/search.html",
+          controller: 'SearchCtrl'
         }
-      });
-    }
+      }
+    })
+
+    .state('app.settings', {
+      url: "/settings",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/settings.html"
+        }
+      }
+    });
+
+  // if none of the above states are matched, use this as the fallback
+  $urlRouterProvider.otherwise('/app/search');
 });
