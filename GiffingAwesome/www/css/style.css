@@ -1,7 +1,16 @@
-img {
-  height: 150px;
+.grid {
+  padding: 0.5em;
 }
 
-.grid {
-  padding: 16px;
+.grid-item {
+  display: inline-block;
+  padding: 0.5em;
+}
+
+.grid-item img {
+  height: 10em;
+}
+
+.grid-item .col {
+  text-align: center;
 }

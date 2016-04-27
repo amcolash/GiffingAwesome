@@ -14,9 +14,18 @@
     <ion-toggle ng-model="$parent.hq" ng-change="loadImages()" toggle-class="toggle-calm">High Quality</ion-toggle>
 
     <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'>
-      <a ng-repeat="image in images" class="grid-item" href={{images[$index].url}}>
+      <div class="grid-item card" ng-repeat="image in images">
         <img ng-src="{{images[$index].src}}"/>
-      </a>
+        <div class="row">
+          <div class="col">
+            <button class="button icon" ng-click="$favorite = !$favorite"
+              ng-class="($favorite) ? 'ion-android-favorite' : 'ion-android-favorite-outline'"></button>
+          </div>
+          <div class="col">
+            <button class="button icon ion-clipboard" clipboard text="images[$index].url" on-copied="copySuccess()" on-error="fail(err)"></button>
+          </div>
+        </div>
+      </div>
     </div>
 
   </ion-content>

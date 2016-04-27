@@ -1,9 +1,9 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope) {
+.controller('AppController', function($scope) {
 })
 
-.controller("SearchCtrl", function($scope, $http) {
+.controller("SearchController", function($scope, $http) {
     $scope.images = [];
     $scope.search = "cats";
     $scope.hq = false;
@@ -12,17 +12,21 @@ angular.module('starter.controllers', [])
       $http.get("http://api.giphy.com/v1/gifs/search?q=" +
           $scope.search + "&api_key=dc6zaTOxFJmzC").then(function(response) {
         var data = response.data.data;
-
+        console.log(data);
         $scope.images = [];
 
         for(var i = 0; i < data.length; i++) {
-          var imgUrl = data[i].images.fixed_width_small.url;
+          var imgUrl = data[i].images.fixed_height_small.url;
           if ($scope.hq) {
-            imgUrl = data[i].images.fixed_width.url;
+            imgUrl = data[i].images.fixed_height.url;
           }
 
-          $scope.images.push({id: i, src: imgUrl, url: data[i].url});
+          $scope.images.push({id: i, src: imgUrl, url: data[i].url, favorite: false});
         }
       });
+    }
+
+    $scope.copySuccess = function() {
+      console.log('copied!');
     }
 })
