@@ -14,3 +14,20 @@
 .grid-item .col {
   text-align: center;
 }
+
+.modal-preview {
+  text-align: center;
+}
+
+.parent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@media (min-width: 680px) {
+  .modal {
+    top: 7%;
+    bottom: 5%;
+  }
+}

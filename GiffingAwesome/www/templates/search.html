@@ -11,18 +11,18 @@
       </label>
     </div>
 
-    <ion-toggle ng-model="$parent.hq" ng-change="loadImages()" toggle-class="toggle-calm">High Quality</ion-toggle>
+    <ion-toggle ng-model="$parent.hq" ng-change="refreshImages()" toggle-class="toggle-calm">High Quality</ion-toggle>
 
     <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'>
       <div class="grid-item card" ng-repeat="image in images">
-        <img ng-src="{{images[$index].src}}"/>
+        <img ng-src="{{image.src}}" ng-click="openModal(image.originalImgUrl)" />
         <div class="row">
           <div class="col">
             <button class="button icon" ng-click="$favorite = !$favorite"
               ng-class="($favorite) ? 'ion-android-favorite' : 'ion-android-favorite-outline'"></button>
           </div>
           <div class="col">
-            <button class="button icon ion-clipboard" clipboard text="images[$index].url" on-copied="copySuccess()" on-error="fail(err)"></button>
+            <button class="button icon ion-clipboard" clipboard text="image.url" on-copied="copySuccess()" on-error="fail(err)"></button>
           </div>
         </div>
       </div>
