@@ -50,7 +50,18 @@ var ionicApp = angular.module('starter', ['ionic', 'starter.controllers', 'angul
           templateUrl: "templates/settings.html"
         }
       }
-    });
+    })
+
+    .state('app.favorites', {
+      url: "/favorites",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/favorites.html"
+        }
+      }
+    })
+
+    ;
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/search');

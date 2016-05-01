@@ -15,15 +15,15 @@
     <ion-toggle ng-model="$parent.hq" toggle-class="toggle-calm">High Quality</ion-toggle>
 
     <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'>
-      <div class="grid-item card" ng-repeat="image in images" loading>
-        <img src="img/loading.svg" ng-src="{{$parent.hq ? image.hqImgUrl : image.imgUrl}}" ng-click="openModal(image.originalImgUrl)" />
+      <div class="grid-item card" ng-repeat="image in images">
+        <img ng-src="{{$parent.hq ? image.hqImgUrl : image.imgUrl}}" ng-click="openModal(image.originalImgUrl)"/>
         <div class="row">
           <div class="col">
             <button class="button icon" ng-click="$favorite = !$favorite"
-              ng-class="($favorite) ? 'ion-android-favorite' : 'ion-android-favorite-outline'"></button>
+              ng-class="($favorite) ? 'ion-android-star' : 'ion-android-star-outline'"></button>
           </div>
           <div class="col">
-            <button class="button icon ion-clipboard" clipboard text="image.url" on-copied="copySuccess()" on-error="fail(err)"></button>
+            <button class="button icon ion-clipboard" clipboard text="image.originalImgUrl" on-copied="copySuccess()" on-error="fail(err)"></button>
           </div>
         </div>
       </div>

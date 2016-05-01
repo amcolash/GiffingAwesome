@@ -3,18 +3,17 @@ angular.module('starter.controllers', [])
 .controller('AppController', function($scope) {
 })
 
-.controller("SearchController", function($scope, $http, $ionicModal) {
+.controller('SearchController', function($scope, $http, $ionicModal) {
   $scope.images = [];
-  $scope.search = "cats";
+  $scope.search = 'cats';
   $scope.hq = false;
   $scope.offset = 0;
   $scope.limit = 25;
   $scope.lastData = [];
 
   $scope.loadImages = function() {
-    console.log("offset: " + $scope.offset);
-    $http.get("http://api.giphy.com/v1/gifs/search?q=" + $scope.search + "&limit=" + $scope.limit +
-      "&offset=" + $scope.offset + "&api_key=dc6zaTOxFJmzC")
+    $http.get('http://api.giphy.com/v1/gifs/search?q=' + $scope.search + '&limit=' + $scope.limit +
+      '&offset=' + $scope.offset + '&api_key=dc6zaTOxFJmzC')
       .then(function(response) {
           var data = response.data.data;
           $scope.lastData = data;
@@ -48,20 +47,16 @@ angular.module('starter.controllers', [])
     return $scope.lastData.length > 0;
   }
 
-  $scope.copySuccess = function() {
-    console.log('copied!');
-  }
-
   $ionicModal.fromTemplateUrl('templates/preview.html', {
     scope: $scope,
     animation: 'slide-in-up',
   }).then(function(modal) {
     $scope.modal = modal;
-    $scope.modal.scope.url = "";
+    $scope.modal.scope.url = '';
   });
 
   $scope.openModal = function(url) {
-    if ($scope.modal.scope.url == "") {
+    if ($scope.modal.scope.url == '') {
       $scope.modal.scope.url = url;
     }
     $scope.modal.show();
@@ -72,7 +67,7 @@ angular.module('starter.controllers', [])
   };
 
   $scope.$on('modal.hidden', function() {
-    $scope.modal.scope.url = "";
+    $scope.modal.scope.url = '';
   });
 
    //Cleanup the modal when we're done with it!
