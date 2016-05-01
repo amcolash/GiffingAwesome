@@ -8,11 +8,19 @@
     <div class="list list-inset">
       <label class="item item-input">
         <i class="icon ion-search placeholder-icon"></i>
-        <input type="text" ng-model="$parent.search" ng-change="changeSearch()" placeholder="Search">
+        <input type="text" ng-model="$parent.search" ng-change="changeSearch()" ng-model-options='{ debounce: 500 }' placeholder="Search">
       </label>
     </div>
 
-    <ion-toggle ng-model="$parent.hq" toggle-class="toggle-calm">High Quality</ion-toggle>
+    <div class="list list-inset">
+      <ion-radio ng-model="$parent.api" ng-value="'Giphy'" ng-change="changeSearch()">Giphy</ion-radio>
+      <ion-radio ng-model="$parent.api" ng-value="'GifMe'" ng-change="changeSearch()">GifMe</ion-radio>
+      <ion-radio ng-model="$parent.api" ng-value="'Riffsy'" ng-change="changeSearch()">Riffsy</ion-radio>
+    </div>
+    
+    <div class="list list-inset">
+      <ion-toggle ng-model="$parent.hq" ng-disabled="$parent.api == 'GifMe'" toggle-class="toggle-calm">High Quality</ion-toggle>
+    </div>
 
     <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'>
       <div class="grid-item card" ng-repeat="image in images">
