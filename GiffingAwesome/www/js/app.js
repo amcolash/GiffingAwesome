@@ -64,7 +64,7 @@ var ionicApp = angular.module('starter', ['ionic', 'starter.controllers', 'angul
     ;
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/search-giphy');
+  $urlRouterProvider.otherwise('/app/search');
 })
 
 ;
