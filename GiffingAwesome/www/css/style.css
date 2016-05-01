@@ -9,10 +9,20 @@
 
 .grid-item img {
   height: 10em;
+  cursor: pointer;
 }
+/*
+.grid-item img:not(.success) {
+  padding: 45px;
+}*/
 
 .grid-item .col {
   text-align: center;
+}
+
+.end-results h4 {
+  text-align: center;
+  color: #444444;
 }
 
 .modal-preview {

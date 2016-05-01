@@ -7,27 +7,45 @@ angular.module('starter.controllers', [])
   $scope.images = [];
   $scope.search = "cats";
   $scope.hq = false;
-  $scope.data = "";
+  $scope.offset = 0;
+  $scope.limit = 25;
+  $scope.lastData = [];
 
   $scope.loadImages = function() {
-    $http.get("http://api.giphy.com/v1/gifs/search?q=" +
-        $scope.search + "&limit=50&api_key=dc6zaTOxFJmzC").then(function(response) {
-          $scope.data = response.data.data;
-          $scope.refreshImages();
-      });
+    console.log("offset: " + $scope.offset);
+    $http.get("http://api.giphy.com/v1/gifs/search?q=" + $scope.search + "&limit=" + $scope.limit +
+      "&offset=" + $scope.offset + "&api_key=dc6zaTOxFJmzC")
+      .then(function(response) {
+          var data = response.data.data;
+          $scope.lastData = data;
+
+          console.log(data);
+          for(var i = 0; i < data.length; i++) {
+            $scope.images.push({
+              id: i,
+              imgUrl: data[i].images.fixed_height_small.url,
+              hqImgUrl: data[i].images.fixed_height.url,
+              originalImgUrl: data[i].images.original.url,
+              favorite: false
+            });
+          }
+
+          $scope.offset += $scope.limit;
+          $scope.$broadcast('scroll.infiniteScrollComplete');
+        }
+      );
   }
 
-  $scope.refreshImages = function() {
+  $scope.changeSearch = function() {
     $scope.images = [];
-    console.log($scope.data);
-    for(var i = 0; i < $scope.data.length; i++) {
-      var imgUrl = $scope.data[i].images.fixed_height_small.url;
-      if ($scope.hq) {
-        imgUrl = $scope.data[i].images.fixed_height.url;
-      }
+    $scope.offset = 0;
+    $scope.lastData = [];
 
-      $scope.images.push({id: i, src: imgUrl, url: $scope.data[i].url, originalImgUrl: $scope.data[i].images.original.url, favorite: false});
-    }
+    $scope.loadImages();
+  }
+
+  $scope.moreDataCanBeLoaded = function() {
+    return $scope.lastData.length > 0;
   }
 
   $scope.copySuccess = function() {
