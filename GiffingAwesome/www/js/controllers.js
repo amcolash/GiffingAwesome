@@ -48,7 +48,7 @@ angular.module('starter.controllers', [])
       var search;
       if ($scope.searchtype === 'Search') {
         search = 'http://api.gifme.io/v1/search?query=' + $scope.search + '&limit=' + $scope.limit +
-          '&page=' + $scope.offset + '&key=rX7kbMzkGu7WJwvG';
+          '&page=' + $scope.offset + '&sfw=false&key=rX7kbMzkGu7WJwvG';
       }
 
       $http.get(search)
