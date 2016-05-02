@@ -12,10 +12,6 @@
   height: 10em;
   cursor: pointer;
 }
-/*
-.grid-item img:not(.success) {
-  padding: 45px;
-}*/
 
 .grid-item .col {
   text-align: center;
