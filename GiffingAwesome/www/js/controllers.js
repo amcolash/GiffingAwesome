@@ -35,13 +35,15 @@ angular.module('starter.controllers', [])
 
           console.log(data);
           for(var i = 0; i < data.length; i++) {
-            $scope.images.push({
+            var img = {
               id: i,
               imgUrl: data[i].images.fixed_height_small.url,
               hqImgUrl: data[i].images.fixed_height.url,
               originalImgUrl: data[i].images.original.url,
-              favorite: false
-            });
+            }
+            img.favorite = favoritesData.isFavorite(img);
+
+            $scope.images.push(img);
           }
 
           $scope.offset += $scope.limit;
@@ -67,13 +69,15 @@ angular.module('starter.controllers', [])
 
           console.log(data);
           for(var i = 0; i < data.length; i++) {
-            $scope.images.push({
+            var img = {
               id: i,
               imgUrl: data[i].link,
               hqImgUrl: data[i].link,
               originalImgUrl: data[i].link,
-              favorite: false
-            });
+            }
+            img.favorite = favoritesData.isFavorite(img);
+
+            $scope.images.push(img);
           }
 
           // +1 page, different from giphy which is an image index offset
@@ -96,13 +100,15 @@ angular.module('starter.controllers', [])
 
           console.log(data);
           for(var i = 0; i < data.length; i++) {
-            $scope.images.push({
+            var img = {
               id: i,
               imgUrl: data[i].media[0].nanogif.url,
               hqImgUrl: data[i].media[0].tinygif.url,
               originalImgUrl: data[i].url,
-              favorite: false
-            });
+            }
+            img.favorite = favoritesData.isFavorite(img);
+
+            $scope.images.push(img);
           }
 
           $scope.offset += $scope.limit;
@@ -144,8 +150,24 @@ angular.module('starter.controllers', [])
   $scope.favorites = favoritesData;
 })
 
-.controller('FavoritesController', function($scope, favoritesData) {
+.controller('FavoritesController', function($scope, previewData, favoritesData) {
+  $scope.preview = previewData;
   $scope.favorites = favoritesData;
+
+  $scope.setupPreview = function(image) {
+    $scope.preview.isLoaded = $scope.preview.url === image.originalImgUrl;
+    $scope.preview.url = image.originalImgUrl;
+  }
+
+  $scope.onFavorite = function(image) {
+    if (!image.favorite) {
+      $scope.favorites.addFavorite(image);
+    } else {
+      $scope.favorites.removeFavorite(image);
+    }
+
+    image.favorite = !image.favorite;
+  }
 })
 
 .factory('previewData', function() {
@@ -170,10 +192,15 @@ angular.module('starter.controllers', [])
     return favorites;
   }
 
+  function isFavorite(image) {
+    return favorites.hasOwnProperty(image.originalImgUrl);
+  }
+
   return {
     addFavorite: addFavorite,
     getFavorites: getFavorites,
     removeFavorite: removeFavorite,
+    isFavorite: isFavorite,
   };
 })
 
