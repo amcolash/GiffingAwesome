@@ -1,4 +1,4 @@
-<ion-side-menus>
+<ion-side-menus ng-controller="MenuController">
   <ion-pane ion-side-menu-content>
     <ion-nav-bar class="bar-dark">
       <ion-nav-back-button class="button-clear"><i class="icon ion-chevron-left"></i> Back</ion-nav-back-button>
@@ -27,4 +27,25 @@
       </ion-list>
     </ion-content>
   </ion-side-menu>
+
+  <ion-side-menu side="right" width="450">
+    <header class="bar bar-header bar-dark">
+      <h1 class="title">Preview</h1>
+      <button menu-toggle="right" class="button button-icon icon ion-close"></button>
+    </header>
+    <ion-content class="has-header right-menu">
+      <div id="center-image">
+        <img ng-src="{{preview.url}}" ng-show="preview.isLoaded" imageonload>
+        <ion-spinner ng-show="!preview.isLoaded"></ion-spinner>
+      </div>
+
+      <div class="item item-input-inset">
+        <label class="item-input-wrapper">
+          <input type="text" value={{preview.url}} disabled>
+        </label>
+        <button class="button button-icon icon ion-clipboard" clipboard text="preview.url"></button>
+      </div>
+    </ion-content>
+  </ion-side-menu>
+
 </ion-side-menus>

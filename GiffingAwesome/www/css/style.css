@@ -22,23 +22,18 @@
   color: #444444;
 }
 
-.modal-preview {
-  text-align: center;
+.right-menu {
+  padding: 1em;
 }
 
-.modal-preview img {
+#center-image {
+  text-align: center;
+  padding: 1em 0;
+}
+#center-image img {
   max-width: 100%;
 }
 
-.flex-center {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-@media (min-width: 680px) {
-  .modal {
-    top: 7%;
-    bottom: 5%;
-  }
+.item-input-wrapper input {
+  width: 100%;
 }

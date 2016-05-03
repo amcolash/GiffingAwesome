@@ -27,36 +27,37 @@ var ionicApp = angular.module('starter', ['ionic', 'starter.controllers', 'angul
   $stateProvider
 
     .state('app', {
-      url: "/app",
+      url: '/app',
       abstract: true,
-      templateUrl: "templates/menu.html",
+      templateUrl: 'templates/menu.html',
       controller: 'AppController'
     })
 
     .state('app.search', {
-      url: "/search",
+      url: '/search',
       views: {
-        'menuContent' :{
-          templateUrl: "templates/search.html",
+        'menuContent': {
+          templateUrl: 'templates/search.html',
           controller: 'SearchController'
         }
       }
     })
 
     .state('app.settings', {
-      url: "/settings",
+      url: '/settings',
       views: {
-        'menuContent' :{
-          templateUrl: "templates/settings.html"
+        'menuContent': {
+          templateUrl: 'templates/settings.html'
         }
       }
     })
 
     .state('app.favorites', {
-      url: "/favorites",
+      url: '/favorites',
       views: {
-        'menuContent' :{
-          templateUrl: "templates/favorites.html"
+        'menuContent': {
+          templateUrl: 'templates/favorites.html',
+          controller: 'FavoritesController'
         }
       }
     })

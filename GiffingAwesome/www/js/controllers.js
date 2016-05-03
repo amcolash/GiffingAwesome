@@ -3,7 +3,10 @@ angular.module('starter.controllers', [])
 .controller('AppController', function($scope) {
 })
 
-.controller('SearchController', function($scope, $http, $ionicModal) {
+.controller('SearchController', function($scope, $http, previewData, favoritesData) {
+  $scope.preview = previewData;
+  $scope.favorites = favoritesData;
+
   $scope.api = 'Giphy';
   $scope.searchtype = 'Search';
   $scope.hq = false;
@@ -120,33 +123,75 @@ angular.module('starter.controllers', [])
     return $scope.lastData.length > 0;
   }
 
-  $ionicModal.fromTemplateUrl('templates/preview.html', {
-    scope: $scope,
-    animation: 'slide-in-up',
-  }).then(function(modal) {
-    $scope.modal = modal;
-    $scope.modal.scope.url = '';
-  });
+  $scope.setupPreview = function(image) {
+    $scope.preview.isLoaded = $scope.preview.url === image.originalImgUrl;
+    $scope.preview.url = image.originalImgUrl;
+  }
 
-  $scope.openModal = function(url) {
-    if ($scope.modal.scope.url == '') {
-      $scope.modal.scope.url = url;
+  $scope.onFavorite = function(image) {
+    if (!image.favorite) {
+      $scope.favorites.addFavorite(image);
+    } else {
+      $scope.favorites.removeFavorite(image);
     }
-    $scope.modal.show();
+
+    image.favorite = !image.favorite;
+  }
+})
+
+.controller('MenuController', function($scope, previewData, favoritesData) {
+  $scope.preview = previewData;
+  $scope.favorites = favoritesData;
+})
+
+.controller('FavoritesController', function($scope, favoritesData) {
+  $scope.favorites = favoritesData;
+})
+
+.factory('previewData', function() {
+  return {
+    url: '',
+    isLoaded: false
   };
+})
 
-  $scope.closeModal = function() {
-    $scope.modal.hide();
+.factory('favoritesData', function() {
+  var favorites = {};
+
+  function addFavorite(image) {
+    favorites[image.originalImgUrl] = image;
+  }
+
+  function removeFavorite(image) {
+    delete favorites[image.originalImgUrl];
+  }
+
+  function getFavorites() {
+    return favorites;
+  }
+
+  return {
+    addFavorite: addFavorite,
+    getFavorites: getFavorites,
+    removeFavorite: removeFavorite,
   };
+})
 
-  $scope.$on('modal.hidden', function() {
-    $scope.modal.scope.url = '';
-  });
-
-   //Cleanup the modal when we're done with it!
-  $scope.$on('$destroy', function() {
-    $scope.modal.remove();
-  });
+.directive('imageonload', function() {
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+      element.bind('load', function() {
+        scope.preview.isLoaded = true;
+        scope.$apply();
+      });
+      element.bind('error', function() {
+        alert('image could not be loaded');
+        scope.preview.isLoaded = true;
+        scope.$apply();
+      });
+    }
+  };
 })
 
 ;
