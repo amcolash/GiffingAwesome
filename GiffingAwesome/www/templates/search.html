@@ -27,8 +27,8 @@
     </div>
 
     <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'>
-      <div class="grid-item card" ng-repeat="image in images">
-        <img ng-src="{{$parent.hq ? image.hqImgUrl : image.imgUrl}}" ng-click="setupPreview(image)" menu-toggle="right"/>
+      <div class="grid-item card" ng-repeat="image in images" ng-hide="image.failed">
+        <img ng-src="{{$parent.hq ? image.hqImgUrl : image.imgUrl}}" ng-click="setupPreview(image)" menu-toggle="right" gridonload/>
         <div class="row">
           <div class="col">
             <button class="button icon" ng-click="onFavorite(image)"

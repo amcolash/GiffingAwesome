@@ -40,6 +40,7 @@ angular.module('starter.controllers', [])
               imgUrl: data[i].images.fixed_height_small.url,
               hqImgUrl: data[i].images.fixed_height.url,
               originalImgUrl: data[i].images.original.url,
+              failed: false,
             }
             img.favorite = favoritesData.isFavorite(img);
 
@@ -74,6 +75,7 @@ angular.module('starter.controllers', [])
               imgUrl: data[i].link,
               hqImgUrl: data[i].link,
               originalImgUrl: data[i].link,
+              failed: false,
             }
             img.favorite = favoritesData.isFavorite(img);
 
@@ -105,6 +107,7 @@ angular.module('starter.controllers', [])
               imgUrl: data[i].media[0].nanogif.url,
               hqImgUrl: data[i].media[0].tinygif.url,
               originalImgUrl: data[i].url,
+              failed: false,
             }
             img.favorite = favoritesData.isFavorite(img);
 
@@ -204,7 +207,7 @@ angular.module('starter.controllers', [])
   };
 })
 
-.directive('imageonload', function() {
+.directive('previewonload', function() {
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
@@ -213,12 +216,30 @@ angular.module('starter.controllers', [])
         scope.$apply();
       });
       element.bind('error', function() {
-        alert('image could not be loaded');
+        console.log('image could not be loaded');
         scope.preview.isLoaded = true;
         scope.$apply();
       });
     }
   };
 })
+
+.directive('gridonload', function() {
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+      // element.bind('load', function() {
+      //   scope.image.isLoaded = true;
+      //   scope.$apply();
+      // });
+      element.bind('error', function() {
+        console.log('image could not be loaded');
+        scope.image.failed = true;
+        scope.$apply();
+      });
+    }
+  };
+})
+
 
 ;
