@@ -1,7 +1,6 @@
 <ion-side-menus ng-controller="MenuController">
   <ion-pane ion-side-menu-content>
     <ion-nav-bar class="bar-dark">
-      <ion-nav-back-button class="button-clear"><i class="icon ion-chevron-left"></i> Back</ion-nav-back-button>
     </ion-nav-bar>
     <ion-nav-view name="menuContent" animation="slide-left-right"></ion-nav-view>
   </ion-pane>
@@ -23,6 +22,10 @@
         <ion-item nav-clear menu-close href="#/app/settings">
           <span class="icon ion-gear-a padding-right"></span>
           <span>Settings</span>
+        </ion-item>
+        <ion-item nav-clear menu-close ng-click="auth.$unauth()">
+          <span class="icon ion-log-out padding-right"></span>
+          <span>Logout</span>
         </ion-item>
       </ion-list>
     </ion-content>

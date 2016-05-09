@@ -33,7 +33,7 @@ angular.module('starter.controllers', [])
           var data = response.data.data;
           $scope.lastData = data;
 
-          console.log(data);
+          // console.log(data);
           for(var i = 0; i < data.length; i++) {
             var img = {
               id: i,
@@ -68,7 +68,7 @@ angular.module('starter.controllers', [])
 
           $scope.lastData = data;
 
-          console.log(data);
+          // console.log(data);
           for(var i = 0; i < data.length; i++) {
             var img = {
               id: i,
@@ -100,7 +100,7 @@ angular.module('starter.controllers', [])
           var data = response.data.results;
           $scope.lastData = data;
 
-          console.log(data);
+          // console.log(data);
           for(var i = 0; i < data.length; i++) {
             var img = {
               id: i,
@@ -148,11 +148,6 @@ angular.module('starter.controllers', [])
   }
 })
 
-.controller('MenuController', function($scope, previewData, favoritesData) {
-  $scope.preview = previewData;
-  $scope.favorites = favoritesData;
-})
-
 .controller('FavoritesController', function($scope, previewData, favoritesData) {
   $scope.preview = previewData;
   $scope.favorites = favoritesData;
@@ -172,6 +167,16 @@ angular.module('starter.controllers', [])
     image.favorite = !image.favorite;
   }
 })
+
+.controller('MenuController', function($scope, Auth, previewData, favoritesData) {
+  $scope.auth = Auth;
+  $scope.preview = previewData;
+  $scope.favorites = favoritesData;
+})
+
+.controller('LoginController', ['$scope', 'Auth', function($scope, Auth) {
+  $scope.auth = Auth;
+}])
 
 .factory('previewData', function() {
   return {
@@ -207,6 +212,33 @@ angular.module('starter.controllers', [])
   };
 })
 
+.factory("Auth", ["$firebaseAuth", "$state", function($firebaseAuth, $state) {
+    var ref = new Firebase("https://giffingawesome.firebaseio.com");
+    var auth = $firebaseAuth(ref);
+
+    // any time auth status updates, add the user data to scope
+    auth.$onAuth(function(authData) {
+      auth.authData = authData;
+
+      if (authData === null || authData === undefined) {
+        $state.go('app.login');
+      } else {
+        $state.go('app.search');
+      }
+    });
+
+    return auth;
+  }
+])
+
+.factory("FirebaseProfile", ["$firebaseObject", "Auth",
+  function($firebaseObject, Auth) {
+    var USER = Auth.uid;
+    var ref = new Firebase("https://giffingawesome.firebaseio.com/users/" + USER);
+    return $firebaseObject(ref);
+  }
+])
+
 .directive('previewonload', function() {
   return {
     restrict: 'A',
@@ -240,6 +272,5 @@ angular.module('starter.controllers', [])
     }
   };
 })
-
 
 ;
