@@ -23,12 +23,6 @@ angular.module('starter.controllers', [])
     return $scope.search === '' ? 'Enter a Search' : 'End of Results';
   }
 
-  $scope.initSearch = function() {
-    $scope.favorites.getFavorites().$loaded(function() {
-      $scope.loadImages();
-    })
-  }
-
   $scope.loadImages = function() {
     if ($scope.api === 'Giphy') {
       var search;

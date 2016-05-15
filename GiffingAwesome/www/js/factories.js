@@ -28,9 +28,13 @@ angular.module('starter.factories', [])
 
 .factory("Favorites", ["$firebaseArray", "Auth",
   function($firebaseArray, Auth) {
-    var USER = Auth.authData.uid;
-    var ref = new Firebase("https://giffingawesome.firebaseio.com/users/" + USER + "/favorites");
-    var favorites = $firebaseArray(ref);
+    var favorites = null;
+
+    Auth.$onAuth(function(authData) {
+      var USER = Auth.authData.uid;
+      var ref = new Firebase("https://giffingawesome.firebaseio.com/users/" + USER + "/favorites");
+      favorites = $firebaseArray(ref);
+    });
 
     function addFavorite(image) {
       favorites.$add(image);
@@ -47,6 +51,9 @@ angular.module('starter.factories', [])
     }
 
     function getFavorites() {
+      if (favorites === null) {
+        return [];
+      }
       return favorites;
     }
 
