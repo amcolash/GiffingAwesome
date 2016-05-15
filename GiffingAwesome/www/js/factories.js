@@ -7,8 +7,8 @@ angular.module('starter.factories', [])
   };
 })
 
-.factory("Auth", ["$firebaseAuth", "$state", function($firebaseAuth, $state) {
-    var ref = new Firebase("https://giffingawesome.firebaseio.com");
+.factory('Auth', ['$firebaseAuth', '$state', function($firebaseAuth, $state) {
+    var ref = new Firebase('https://giffingawesome.firebaseio.com');
     var auth = $firebaseAuth(ref);
 
     // any time auth status updates, add the user data to scope
@@ -26,13 +26,13 @@ angular.module('starter.factories', [])
   }
 ])
 
-.factory("Favorites", ["$firebaseArray", "Auth",
+.factory('Favorites', ['$firebaseArray', 'Auth',
   function($firebaseArray, Auth) {
     var favorites = null;
 
     Auth.$onAuth(function(authData) {
       var USER = Auth.authData.uid;
-      var ref = new Firebase("https://giffingawesome.firebaseio.com/users/" + USER + "/favorites");
+      var ref = new Firebase('https://giffingawesome.firebaseio.com/users/' + USER + '/favorites');
       favorites = $firebaseArray(ref);
     });
 
@@ -47,7 +47,7 @@ angular.module('starter.factories', [])
           return;
         }
       }
-      console.error("unable to remove favorite");
+      console.error('unable to remove favorite');
     }
 
     function getFavorites() {

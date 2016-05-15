@@ -24,19 +24,19 @@ var ionicApp = angular.module('starter', ['ionic', 'starter.controllers', 'start
   });
 })
 
-.run(["$rootScope", "$state", "Auth", function($rootScope, $state, Auth) {
-  $rootScope.$on("$stateChangeError", function(event, toState, toParams, fromState, fromParams, error) {
+.run(['$rootScope', '$state', 'Auth', function($rootScope, $state, Auth) {
+  $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
     // We can catch the error thrown when the $requireAuth promise is rejected
     // and redirect the user back to the home page
-    if (error === "AUTH_REQUIRED") {
-      console.log("not authenticated");
-      $state.go("app.login");
+    if (error === 'AUTH_REQUIRED') {
+      console.log('not authenticated');
+      $state.go('app.login');
     }
   });
 
-  $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams, error) {
+  $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, error) {
     // Prevent going back to the login page after a successful authentication
-    if (toState.name === "app.login" && Auth.authData !== null && Auth.authData !== undefined) {
+    if (toState.name === 'app.login' && Auth.authData !== null && Auth.authData !== undefined) {
       event.preventDefault();
     }
   })
@@ -61,7 +61,7 @@ var ionicApp = angular.module('starter', ['ionic', 'starter.controllers', 'start
         }
       },
       resolve: {
-        "currentAuth": ["Auth", function(Auth) {
+        'currentAuth': ['Auth', function(Auth) {
           // $requireAuth returns a promise so the resolve waits for it to complete
           // If the promise is rejected, it will throw a $stateChangeError (see above)
           return Auth.$requireAuth();
@@ -78,7 +78,7 @@ var ionicApp = angular.module('starter', ['ionic', 'starter.controllers', 'start
         }
       },
       resolve: {
-        "currentAuth": ["Auth", function(Auth) {
+        'currentAuth': ['Auth', function(Auth) {
           // $requireAuth returns a promise so the resolve waits for it to complete
           // If the promise is rejected, it will throw a $stateChangeError (see above)
           return Auth.$requireAuth();
@@ -95,7 +95,7 @@ var ionicApp = angular.module('starter', ['ionic', 'starter.controllers', 'start
         }
       },
       resolve: {
-        "currentAuth": ["Auth", function(Auth) {
+        'currentAuth': ['Auth', function(Auth) {
           // $waitForAuth returns a promise so the resolve waits for it to complete
           return Auth.$waitForAuth();
         }]
