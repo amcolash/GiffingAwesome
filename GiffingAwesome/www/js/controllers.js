@@ -3,19 +3,31 @@ angular.module('starter.controllers', [])
 .controller('AppController', function($scope) {
 })
 
-.controller('SearchController', function($scope, $http, previewData, favoritesData) {
+.controller('SearchController', ['$scope', '$http', 'previewData', 'Favorites',
+  function($scope, $http, previewData, Favorites) {
+
   $scope.preview = previewData;
-  $scope.favorites = favoritesData;
+  $scope.favorites = Favorites;
 
   $scope.api = 'Giphy';
   $scope.searchtype = 'Search';
   $scope.hq = false;
-  $scope.search = 'cats';
+  $scope.search = '';
 
   $scope.images = [];
   $scope.offset = 0;
   $scope.limit = 25;
   $scope.lastData = [];
+
+  $scope.endResults = function() {
+    return $scope.search === '' ? 'Enter a Search' : 'End of Results';
+  }
+
+  $scope.initSearch = function() {
+    $scope.favorites.getFavorites().$loaded(function() {
+      $scope.loadImages();
+    })
+  }
 
   $scope.loadImages = function() {
     if ($scope.api === 'Giphy') {
@@ -36,13 +48,12 @@ angular.module('starter.controllers', [])
           // console.log(data);
           for(var i = 0; i < data.length; i++) {
             var img = {
-              id: i,
               imgUrl: data[i].images.fixed_height_small.url,
               hqImgUrl: data[i].images.fixed_height.url,
               originalImgUrl: data[i].images.original.url,
               failed: false,
             }
-            img.favorite = favoritesData.isFavorite(img);
+            img.favorite = $scope.favorites.isFavorite(img);
 
             $scope.images.push(img);
           }
@@ -71,13 +82,12 @@ angular.module('starter.controllers', [])
           // console.log(data);
           for(var i = 0; i < data.length; i++) {
             var img = {
-              id: i,
               imgUrl: data[i].link,
               hqImgUrl: data[i].link,
               originalImgUrl: data[i].link,
               failed: false,
             }
-            img.favorite = favoritesData.isFavorite(img);
+            img.favorite = $scope.favorites.isFavorite(img);
 
             $scope.images.push(img);
           }
@@ -103,13 +113,12 @@ angular.module('starter.controllers', [])
           // console.log(data);
           for(var i = 0; i < data.length; i++) {
             var img = {
-              id: i,
               imgUrl: data[i].media[0].nanogif.url,
               hqImgUrl: data[i].media[0].tinygif.url,
               originalImgUrl: data[i].url,
               failed: false,
             }
-            img.favorite = favoritesData.isFavorite(img);
+            img.favorite = $scope.favorites.isFavorite(img);
 
             $scope.images.push(img);
           }
@@ -139,18 +148,19 @@ angular.module('starter.controllers', [])
 
   $scope.onFavorite = function(image) {
     if (!image.favorite) {
+      image.favorite = true;
       $scope.favorites.addFavorite(image);
     } else {
+      image.favorite = false;
       $scope.favorites.removeFavorite(image);
     }
-
-    image.favorite = !image.favorite;
   }
-})
+}])
 
-.controller('FavoritesController', function($scope, previewData, favoritesData) {
+.controller('FavoritesController', ['$scope', 'previewData', 'Favorites',
+  function($scope, previewData, Favorites) {
   $scope.preview = previewData;
-  $scope.favorites = favoritesData;
+  $scope.favorites = Favorites;
 
   $scope.setupPreview = function(image) {
     $scope.preview.isLoaded = $scope.preview.url === image.originalImgUrl;
@@ -159,118 +169,23 @@ angular.module('starter.controllers', [])
 
   $scope.onFavorite = function(image) {
     if (!image.favorite) {
+      image.favorite = true;
       $scope.favorites.addFavorite(image);
     } else {
+      image.favorite = false;
       $scope.favorites.removeFavorite(image);
     }
-
-    image.favorite = !image.favorite;
   }
-})
+}])
 
-.controller('MenuController', function($scope, Auth, previewData, favoritesData) {
+.controller('MenuController', ['$scope', 'Auth', 'previewData', function($scope, Auth, previewData) {
   $scope.auth = Auth;
   $scope.preview = previewData;
-  $scope.favorites = favoritesData;
-})
+  // $scope.favorites = favoritesData;
+}])
 
 .controller('LoginController', ['$scope', 'Auth', function($scope, Auth) {
   $scope.auth = Auth;
 }])
-
-.factory('previewData', function() {
-  return {
-    url: '',
-    isLoaded: false
-  };
-})
-
-.factory('favoritesData', function() {
-  var favorites = {};
-
-  function addFavorite(image) {
-    favorites[image.originalImgUrl] = image;
-  }
-
-  function removeFavorite(image) {
-    delete favorites[image.originalImgUrl];
-  }
-
-  function getFavorites() {
-    return favorites;
-  }
-
-  function isFavorite(image) {
-    return favorites.hasOwnProperty(image.originalImgUrl);
-  }
-
-  return {
-    addFavorite: addFavorite,
-    getFavorites: getFavorites,
-    removeFavorite: removeFavorite,
-    isFavorite: isFavorite,
-  };
-})
-
-.factory("Auth", ["$firebaseAuth", "$state", function($firebaseAuth, $state) {
-    var ref = new Firebase("https://giffingawesome.firebaseio.com");
-    var auth = $firebaseAuth(ref);
-
-    // any time auth status updates, add the user data to scope
-    auth.$onAuth(function(authData) {
-      auth.authData = authData;
-
-      if (authData === null || authData === undefined) {
-        $state.go('app.login');
-      } else {
-        $state.go('app.search');
-      }
-    });
-
-    return auth;
-  }
-])
-
-.factory("FirebaseProfile", ["$firebaseObject", "Auth",
-  function($firebaseObject, Auth) {
-    var USER = Auth.uid;
-    var ref = new Firebase("https://giffingawesome.firebaseio.com/users/" + USER);
-    return $firebaseObject(ref);
-  }
-])
-
-.directive('previewonload', function() {
-  return {
-    restrict: 'A',
-    link: function(scope, element, attrs) {
-      element.bind('load', function() {
-        scope.preview.isLoaded = true;
-        scope.$apply();
-      });
-      element.bind('error', function() {
-        console.log('image could not be loaded');
-        scope.preview.isLoaded = true;
-        scope.$apply();
-      });
-    }
-  };
-})
-
-.directive('gridonload', function() {
-  return {
-    restrict: 'A',
-    link: function(scope, element, attrs) {
-      // element.bind('load', function() {
-      //   scope.image.isLoaded = true;
-      //   scope.$apply();
-      // });
-      element.bind('error', function() {
-        console.log('image could not be loaded');
-        scope.image.failed = true;
-        scope.$apply();
-      });
-    }
-  };
-})
 
 ;

@@ -6,13 +6,13 @@
     <div class="list list-inset">
       <ion-toggle ng-model="$parent.hq" toggle-class="toggle-calm">High Quality</ion-toggle>
     </div>
-
+    
     <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'>
       <div class="grid-item card" ng-repeat="image in favorites.getFavorites()">
         <img ng-src="{{$parent.hq ? image.hqImgUrl : image.imgUrl}}" ng-click="setupPreview(image)" menu-toggle="right"/>
         <div class="row">
           <div class="col">
-            <button class="button icon" ng-click="onFavorite(image)"
+            <button class="button icon" ng-click="onFavorite(image, $index)"
               ng-class="image.favorite ? 'ion-android-star' : 'ion-android-star-outline'"></button>
           </div>
           <div class="col">

@@ -3,7 +3,8 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var ionicApp = angular.module('starter', ['ionic', 'starter.controllers', 'angular-clipboard', 'firebase'])
+var ionicApp = angular.module('starter', ['ionic', 'starter.controllers', 'starter.factories',
+  'starter.directives', 'angular-clipboard', 'firebase'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -23,17 +24,6 @@ var ionicApp = angular.module('starter', ['ionic', 'starter.controllers', 'angul
   });
 })
 
-// .run(function ($rootScope, $state, Auth) {
-//   $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams) {
-//     if (toState.authenticate && (Auth.authData === undefined || Auth.authData === null)) {
-//       // User isn’t authenticated
-//       console.log("no auth");
-//       $state.transitionTo("app.login");
-//       event.preventDefault();
-//     }
-//   })
-// })
-
 .run(["$rootScope", "$state", "Auth", function($rootScope, $state, Auth) {
   $rootScope.$on("$stateChangeError", function(event, toState, toParams, fromState, fromParams, error) {
     // We can catch the error thrown when the $requireAuth promise is rejected
@@ -45,9 +35,9 @@ var ionicApp = angular.module('starter', ['ionic', 'starter.controllers', 'angul
   });
 
   $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams, error) {
+    // Prevent going back to the login page after a successful authentication
     if (toState.name === "app.login" && Auth.authData !== null && Auth.authData !== undefined) {
       event.preventDefault();
-      console.log("already authenticated");
     }
   })
 }])
