@@ -1,5 +1,5 @@
-<ion-view title="Login">
-  <ion-content class="has-header">
+<div layout="column" title="Login">
+  <div class="has-header">
     <div class="list list-inset">
 
       <div ng-show="auth.authData">
@@ -10,10 +10,31 @@
       </div>
       <div ng-hide="auth.authData">
         <h1>Welcome, please log in.</h1>
-        <button class="button button-block icon-left ion-social-facebook button-positive" ng-click="auth.$authWithOAuthPopup('facebook')"> Login With Facebook</button>
-        <button class="button button-block icon-left ion-social-twitter button-calm" ng-click="auth.$authWithOAuthPopup('twitter')"> Login With Twitter</button>
-        <button class="button button-block icon-left ion-social-google button-assertive" ng-click="auth.$authWithOAuthPopup('google')"> Login With Google</button>
+
+        <div md-theme="socialColors">
+          <section layout="row">
+            <md-button flex class="md-primary md-raised" ng-click="auth.$authWithOAuthPopup('facebook')" aria-label="Login with Facebook">
+              <ng-md-icon layout-margin layout="row" layout-align="left" icon="facebook" style="fill: white" size="32px"></nd-md-icon>
+              Login With Facebook
+            </md-button>
+          </section>
+
+          <section layout="row">
+            <md-button flex class="md-accent md-raised" ng-click="auth.$authWithOAuthPopup('twitter')" aria-label="Login with Twitter">
+              <ng-md-icon layout-margin layout="row" layout-align="left" icon="twitter" style="fill: white" size="32px"></nd-md-icon>
+              Login With Twitter
+            </md-button>
+          </section>
+
+          <section layout="row">
+            <md-button flex class="md-warn md-raised" ng-click="auth.$authWithOAuthPopup('google')" aria-label="Login with Google">
+              <ng-md-icon layout-margin layout="row" layout-align="left" icon="google-plus" style="fill: white" size="32px"></nd-md-icon>
+              Login With Google
+            </md-button>
+          </section>
+        </div>
+
       </div>
     </div>
-  </ion-content>
-</ion-view>
+  </div>
+</div>

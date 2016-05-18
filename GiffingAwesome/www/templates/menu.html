@@ -1,54 +1,40 @@
-<ion-side-menus ng-controller="MenuController">
-  <ion-pane ion-side-menu-content>
-    <ion-nav-bar class="bar-dark">
-    </ion-nav-bar>
-    <ion-nav-view name="menuContent" animation="slide-left-right"></ion-nav-view>
-  </ion-pane>
+<section layout="row" flex ng-controller="MenuController">
+  <md-sidenav class="md-sidenav-left md-whiteframe-z1" md-component-id="left">
 
-  <ion-side-menu side="left">
-    <header class="bar bar-header bar-dark">
-      <h1 class="title">Menu</h1>
-    </header>
-    <ion-content class="has-header">
-      <ion-list>
-        <ion-item nav-clear menu-close href="#/app/search">
-          <span class="icon ion-search padding-right"></span>
-          <span>Search</span>
-        </ion-item>
-        <ion-item nav-clear menu-close href="#/app/favorites">
-          <span class="icon ion-android-star padding-right"></span>
-          <span>Favorites</span>
-        </ion-item>
-        <ion-item nav-clear menu-close href="#/app/settings">
-          <span class="icon ion-gear-a padding-right"></span>
-          <span>Settings</span>
-        </ion-item>
-        <ion-item nav-clear menu-close ng-click="auth.$unauth()">
-          <span class="icon ion-log-out padding-right"></span>
-          <span>Logout</span>
-        </ion-item>
-      </ion-list>
-    </ion-content>
-  </ion-side-menu>
-
-  <ion-side-menu side="right" width="450">
-    <header class="bar bar-header bar-dark">
-      <h1 class="title">Preview</h1>
-      <button menu-toggle="right" class="button button-icon icon ion-close"></button>
-    </header>
-    <ion-content class="has-header right-menu">
-      <div id="center-image">
-        <img ng-src="{{preview.url}}" ng-show="preview.isLoaded" imageonload>
-        <ion-spinner ng-show="!preview.isLoaded"></ion-spinner>
+    <md-toolbar class="md-theme-indigo">
+      <div class="md-toolbar-tools">
+        <md-button class="md-icon-button" ng-click="toggleLeft()" aria-label="Toggle Menu">
+          <ng-md-icon layout="row" layout-align="center" icon="menu" style="fill: white"></nd-md-icon>
+        </md-button>
+        <h1>Settings</h1>
       </div>
+    </md-toolbar>
 
-      <div class="item item-input-inset">
-        <label class="item-input-wrapper">
-          <input type="text" value={{preview.url}} disabled>
-        </label>
-        <button class="button button-icon icon ion-clipboard" clipboard text="preview.url"></button>
-      </div>
-    </ion-content>
-  </ion-side-menu>
+    <md-list>
+      <md-list-item href="#/app/search">
+        <span>Search</span>
+      </md-list-item>
+      <md-list-item href="#/app/favorites">
+        <span>Favorites</span>
+      </md-list-item>
+      <md-list-item href="#/app/settings">
+        <span>Settings</span>
+      </md-list-item>
+      <md-list-item href="#">
+        <span>Logout</span>
+      </md-list-item>
+    </md-list>
 
-</ion-side-menus>
+  </md-sidenav>
+  <div layout="column" layout-fill layout-align="top center">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <md-button class="md-icon-button" ng-click="toggleLeft()" aria-label="Toggle Menu">
+        <ng-md-icon layout="row" layout-align="center" icon="menu" style="fill: white"></nd-md-icon>
+      </md-button>
+      <h1>Giffing Awesome</h1>
+    </div>
+  </md-toolbar>
+</section>
+
+<div ui-view name="menuContent" layout-margin></div>

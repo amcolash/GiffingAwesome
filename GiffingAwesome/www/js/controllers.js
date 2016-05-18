@@ -172,10 +172,14 @@ angular.module('starter.controllers', [])
   }
 }])
 
-.controller('MenuController', ['$scope', 'Auth', 'previewData', function($scope, Auth, previewData) {
+.controller('MenuController', ['$scope', 'Auth', 'previewData', '$mdSidenav', function($scope, Auth, previewData, $mdSidenav) {
   $scope.auth = Auth;
   $scope.preview = previewData;
   // $scope.favorites = favoritesData;
+
+  $scope.toggleLeft = function() {
+    $mdSidenav('left').toggle();
+  }
 }])
 
 .controller('LoginController', ['$scope', 'Auth', function($scope, Auth) {
