@@ -19,6 +19,11 @@ angular.module('starter.controllers', [])
   $scope.limit = 25;
   $scope.lastData = [];
 
+  // run changeSearch each time the view is entered - that way, favorites are synced
+  $scope.$on('$ionicView.enter', function() {
+    $scope.changeSearch();
+  })
+
   $scope.endResults = function() {
     return $scope.search === '' ? 'Enter a Search' : 'End of Results';
   }
@@ -172,10 +177,40 @@ angular.module('starter.controllers', [])
   }
 }])
 
-.controller('MenuController', ['$scope', 'Auth', 'previewData', function($scope, Auth, previewData) {
+.controller('MenuController', ['$scope', 'Auth', 'previewData', '$ionicModal', 'Favorites',
+  function($scope, Auth, previewData, $ionicModal, Favorites) {
   $scope.auth = Auth;
   $scope.preview = previewData;
-  // $scope.favorites = favoritesData;
+  $scope.favorites = Favorites;
+  $scope.customGif = { imgUrl: '' };
+
+  $ionicModal.fromTemplateUrl('templates/custom-gif.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+  $scope.openModal = function() {
+    $scope.modal.show();
+  };
+  // Cleanup the modal when we're done with it!
+  $scope.$on('$destroy', function() {
+    $scope.modal.remove();
+  });
+
+  $scope.addCustomGif = function() {
+    var image = {
+      imgUrl: $scope.customGif.imgUrl,
+      hqImgUrl: $scope.customGif.imgUrl,
+      originalImgUrl: $scope.customGif.imgUrl,
+      favorite: true
+    }
+    $scope.favorites.addFavorite(image);
+    $scope.customGif.imgUrl = '';
+
+    $scope.modal.hide();
+  };
+
 }])
 
 .controller('LoginController', ['$scope', 'Auth', function($scope, Auth) {

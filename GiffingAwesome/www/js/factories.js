@@ -37,7 +37,14 @@ angular.module('starter.factories', [])
     });
 
     function addFavorite(image) {
-      favorites.$add(image);
+      // Strip out stuff that isn't important
+      var customImage = {
+        imgUrl: image.imgUrl,
+        hqImgUrl: image.hqImgUrl,
+        originalImgUrl: image.originalImgUrl,
+        favorite: image.favorite
+      }
+      favorites.$add(customImage);
     }
 
     function removeFavorite(image) {
