@@ -42,6 +42,10 @@ var ionicApp = angular.module('starter', ['ionic', 'starter.controllers', 'start
   })
 }])
 
+.config(function($ionicConfigProvider) {
+  $ionicConfigProvider.scrolling.jsScrolling(false);
+})
+
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
 
