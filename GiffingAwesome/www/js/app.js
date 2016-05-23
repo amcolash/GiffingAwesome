@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 var ionicApp = angular.module('starter', ['ionic', 'starter.controllers', 'starter.factories',
-  'starter.directives', 'angular-clipboard', 'firebase'])
+  'starter.directives', 'angular-clipboard', 'firebase', 'ngTagsInput'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {

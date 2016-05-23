@@ -6,10 +6,11 @@
     <div class="list list-inset">
       <ion-toggle ng-model="$parent.hq" toggle-class="toggle-calm">High Quality</ion-toggle>
     </div>
-    
+
     <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'>
       <div class="grid-item card" ng-repeat="image in favorites.getFavorites()">
         <img ng-src="{{$parent.hq ? image.hqImgUrl : image.imgUrl}}" ng-click="setupPreview(image)" menu-toggle="right"/>
+        <tags-input ng-model="image.tags" on-tag-added="updateTags(image)" on-tag-removed="updateTags(image)"></tags-input>
         <div class="row">
           <div class="col">
             <button class="button icon" ng-click="onFavorite(image, $index)"
@@ -19,6 +20,7 @@
             <button class="button icon ion-clipboard" clipboard text="image.originalImgUrl"></button>
           </div>
         </div>
+
       </div>
     </div>
   </ion-content>

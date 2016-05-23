@@ -9,6 +9,10 @@
         <i class="icon ion-link placeholder-icon"></i>
         <input type="text" ng-model="$parent.customGif.imgUrl" placeholder="Url">
       </label>
+      <label class="item item-input">
+        <i class="icon ion-pound placeholder-icon"></i>
+        <tags-input ng-model="$parent.customGif.tags"></tags-input>
+      </label>
       <button class="button button-full button-dark" ng-click="addCustomGif()">Add</button>
     </div>
   </ion-content>

@@ -42,7 +42,8 @@ angular.module('starter.factories', [])
         imgUrl: image.imgUrl,
         hqImgUrl: image.hqImgUrl,
         originalImgUrl: image.originalImgUrl,
-        favorite: image.favorite
+        favorite: image.favorite,
+        tags: image.tags
       }
       favorites.$add(customImage);
     }
@@ -55,6 +56,18 @@ angular.module('starter.factories', [])
         }
       }
       console.error('unable to remove favorite');
+    }
+
+    function updateTags(image) {
+      console.log(image);
+      for (var i = 0; i < favorites.length; i++) {
+        if (favorites[i].originalImgUrl === image.originalImgUrl) {
+          console.log(favorites[i]);
+          image.tags = image.tags || [];
+          favorites[i].tags = image.tags;
+          favorites.$save(i);
+        }
+      }
     }
 
     function getFavorites() {
@@ -76,9 +89,10 @@ angular.module('starter.factories', [])
 
     return {
       addFavorite: addFavorite,
-      getFavorites: getFavorites,
       removeFavorite: removeFavorite,
-      isFavorite: isFavorite
+      updateTags: updateTags,
+      getFavorites: getFavorites,
+      isFavorite: isFavorite,
     };
   }
 ])

@@ -51,6 +51,7 @@ angular.module('starter.controllers', [])
               hqImgUrl: data[i].images.fixed_height.url,
               originalImgUrl: data[i].images.original.url,
               failed: false,
+              tags: []
             }
             img.favorite = $scope.favorites.isFavorite(img);
 
@@ -85,6 +86,7 @@ angular.module('starter.controllers', [])
               hqImgUrl: data[i].link,
               originalImgUrl: data[i].link,
               failed: false,
+              tags: []
             }
             img.favorite = $scope.favorites.isFavorite(img);
 
@@ -116,6 +118,7 @@ angular.module('starter.controllers', [])
               hqImgUrl: data[i].media[0].tinygif.url,
               originalImgUrl: data[i].url,
               failed: false,
+              tags: []
             }
             img.favorite = $scope.favorites.isFavorite(img);
 
@@ -175,6 +178,11 @@ angular.module('starter.controllers', [])
       $scope.favorites.removeFavorite(image);
     }
   }
+
+  $scope.updateTags = function(image) {
+    $scope.favorites.updateTags(image);
+  };
+
 }])
 
 .controller('MenuController', ['$scope', 'Auth', 'previewData', '$ionicModal', 'Favorites',
@@ -182,7 +190,7 @@ angular.module('starter.controllers', [])
   $scope.auth = Auth;
   $scope.preview = previewData;
   $scope.favorites = Favorites;
-  $scope.customGif = { imgUrl: '' };
+  $scope.customGif = { imgUrl: '', tags: [] };
 
   $ionicModal.fromTemplateUrl('templates/custom-gif.html', {
     scope: $scope,
@@ -193,6 +201,10 @@ angular.module('starter.controllers', [])
   $scope.openModal = function() {
     $scope.modal.show();
   };
+  // Reset modal on hide
+  $scope.$on('modal.hidden', function() {
+    $scope.customGif = { imgUrl: '', tags: [] };
+  });
   // Cleanup the modal when we're done with it!
   $scope.$on('$destroy', function() {
     $scope.modal.remove();
@@ -203,10 +215,10 @@ angular.module('starter.controllers', [])
       imgUrl: $scope.customGif.imgUrl,
       hqImgUrl: $scope.customGif.imgUrl,
       originalImgUrl: $scope.customGif.imgUrl,
-      favorite: true
+      favorite: true,
+      tags: $scope.customGif.tags
     }
-    $scope.favorites.addFavorite(image);
-    $scope.customGif.imgUrl = '';
+    $scope.favorites.addFavorite(image);;
 
     $scope.modal.hide();
   };
