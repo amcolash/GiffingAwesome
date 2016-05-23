@@ -6,10 +6,11 @@
   <ion-content class="has-header">
 
     <div class="list list-inset">
-      <label class="item item-input">
+      <div class="item item-input">
         <i class="icon ion-search placeholder-icon"></i>
         <input type="text" ng-model="$parent.search" ng-change="changeSearch()" ng-model-options='{ debounce: 500 }' ng-show="$parent.searchtype != 'Trending'" placeholder="Search">
-      </label>
+        <button ng-if="$parent.search.length" class="button-icon input-button placeholder-icon ion-close" ng-click="clearSearch()">
+      </div>
     </div>
 
     <div class="list list-inset">

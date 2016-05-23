@@ -4,13 +4,21 @@
   </ion-nav-buttons>
   <ion-content class="has-header">
     <div class="list list-inset">
+      <div class="item item-input">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input type="text" ng-model="$parent.search" ng-model-options='{ debounce: 500 }' placeholder="Search">
+        <button ng-if="$parent.search.length" class="button-icon input-button placeholder-icon ion-close" ng-click="clearSearch()">
+      </div>
+    </div>
+
+    <div class="list list-inset">
       <ion-toggle ng-model="$parent.hq" toggle-class="toggle-calm">High Quality</ion-toggle>
     </div>
 
     <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'>
-      <div class="grid-item card" ng-repeat="image in favorites.getFavorites()">
+      <div class="grid-item card" ng-repeat="image in favorites.getFavorites() | filter:$parent.search">
         <img ng-src="{{$parent.hq ? image.hqImgUrl : image.imgUrl}}" ng-click="setupPreview(image)" menu-toggle="right"/>
-        <tags-input ng-model="image.tags" on-tag-added="updateTags(image)" on-tag-removed="updateTags(image)"></tags-input>
+        <tags-input ng-model="image.tags" on-tag-added="updateTags({image: image, tag: $tag})" on-tag-removed="updateTags({image: image, tag: $tag})"></tags-input>
         <div class="row">
           <div class="col">
             <button class="button icon" ng-click="onFavorite(image, $index)"

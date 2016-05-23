@@ -58,12 +58,13 @@ angular.module('starter.factories', [])
       console.error('unable to remove favorite');
     }
 
-    function updateTags(image) {
-      console.log(image);
+    function updateTags(value) {
+      var image = value.image;
+      var tag = value.tag;
+
       for (var i = 0; i < favorites.length; i++) {
         if (favorites[i].originalImgUrl === image.originalImgUrl) {
-          console.log(favorites[i]);
-          image.tags = image.tags || [];
+          image.tags = image.tags || [tag];
           favorites[i].tags = image.tags;
           favorites.$save(i);
         }

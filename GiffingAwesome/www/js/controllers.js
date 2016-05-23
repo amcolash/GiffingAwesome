@@ -139,6 +139,11 @@ angular.module('starter.controllers', [])
     $scope.loadImages();
   }
 
+  $scope.clearSearch = function() {
+    $scope.search = '';
+    $scope.changeSearch();
+  }
+
   $scope.moreDataCanBeLoaded = function() {
     return $scope.lastData.length > 0;
   }
@@ -182,6 +187,10 @@ angular.module('starter.controllers', [])
   $scope.updateTags = function(image) {
     $scope.favorites.updateTags(image);
   };
+
+  $scope.clearSearch = function() {
+    $scope.search = '';
+  }
 
 }])
 
