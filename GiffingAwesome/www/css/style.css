@@ -30,6 +30,10 @@
   display: inline-block;
 }
 
+tags-input .tags .tag-item.selected {
+  background: #febbbb;
+}
+
 /* Custom preview style */
 .right-menu {
   padding: 1em;

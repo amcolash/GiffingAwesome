@@ -3,11 +3,12 @@ angular.module('starter.controllers', [])
 .controller('AppController', function($scope) {
 })
 
-.controller('SearchController', ['$scope', '$http', 'previewData', 'Favorites',
-  function($scope, $http, previewData, Favorites) {
+.controller('SearchController', ['$scope', '$http', 'previewData', 'Favorites', 'Settings',
+  function($scope, $http, previewData, Favorites, Settings) {
 
   $scope.preview = previewData;
   $scope.favorites = Favorites;
+  $scope.settings = Settings;
 
   $scope.api = 'Giphy';
   $scope.searchtype = 'Search';
@@ -29,14 +30,17 @@ angular.module('starter.controllers', [])
   }
 
   $scope.loadImages = function() {
+    var nsfw = Settings().nsfw || false;
+
     if ($scope.api === 'Giphy') {
       var search;
+      var nsfwFilter = nsfw ? '' : '&rating=pg-13';
       if ($scope.searchtype === 'Search') {
-        search = 'http://api.giphy.com/v1/gifs/search?q=' + $scope.search + '&limit=' + $scope.limit +
-          '&offset=' + $scope.offset + '&api_key=dc6zaTOxFJmzC';
+        search = 'https://api.giphy.com/v1/gifs/search?q=' + $scope.search + '&limit=' + $scope.limit +
+          '&offset=' + $scope.offset + nsfw + '&api_key=dc6zaTOxFJmzC';
       } else if ($scope.searchtype === 'Trending') {
-        search = 'http://api.giphy.com/v1/gifs/trending?limit=' + $scope.limit +
-          '&offset=' + $scope.offset + '&api_key=dc6zaTOxFJmzC';
+        search = 'https://api.giphy.com/v1/gifs/trending?limit=' + $scope.limit +
+          '&offset=' + $scope.offset + nsfw + '&api_key=dc6zaTOxFJmzC';
       }
 
       $http.get(search)
@@ -63,9 +67,10 @@ angular.module('starter.controllers', [])
         });
     } else if ($scope.api === 'GifMe') {
       var search;
+      var nsfwFilter = nsfw ? '&sfw=false' : '&sfw=true';
       if ($scope.searchtype === 'Search') {
         search = 'http://api.gifme.io/v1/search?query=' + $scope.search + '&limit=' + $scope.limit +
-          '&page=' + $scope.offset + '&sfw=false&key=rX7kbMzkGu7WJwvG';
+          '&page=' + $scope.offset + nsfw + '&key=rX7kbMzkGu7WJwvG';
       }
 
       $http.get(search)
@@ -100,10 +105,10 @@ angular.module('starter.controllers', [])
     } else if ($scope.api === 'Riffsy') {
       var search;
       if ($scope.searchtype === 'Search') {
-        search = 'http://api.riffsy.com/v1/search?tag=' + $scope.search + '&limit=' + $scope.limit +
+        search = 'https://api.riffsy.com/v1/search?tag=' + $scope.search + '&limit=' + $scope.limit +
           '&pos=' + $scope.offset;
       } else if ($scope.searchtype === 'Trending') {
-        search = 'http://api.riffsy.com/v1/trending?limit=50';
+        search = 'https://api.riffsy.com/v1/trending?limit=50';
       }
 
       $http.get(search)
@@ -136,7 +141,9 @@ angular.module('starter.controllers', [])
     $scope.offset = 0;
     $scope.lastData = [];
 
-    $scope.loadImages();
+    if ($scope.search !== '') {
+      $scope.loadImages();
+    }
   }
 
   $scope.clearSearch = function() {
@@ -227,11 +234,15 @@ angular.module('starter.controllers', [])
       favorite: true,
       tags: $scope.customGif.tags
     }
-    $scope.favorites.addFavorite(image);;
+    $scope.favorites.addFavorite(image);
 
     $scope.modal.hide();
   };
 
+}])
+
+.controller('SettingsController', ['$scope', 'Settings', function($scope, Settings) {
+  Settings().$bindTo($scope, 'settings');
 }])
 
 .controller('LoginController', ['$scope', 'Auth', function($scope, Auth) {

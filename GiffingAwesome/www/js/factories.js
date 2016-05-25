@@ -26,6 +26,24 @@ angular.module('starter.factories', [])
   }
 ])
 
+.factory('Settings', ['$firebaseObject', 'Auth',
+  function($firebaseObject, Auth) {
+    var settings = null;
+
+    Auth.$onAuth(function(authData) {
+      var USER = Auth.authData.uid;
+      var ref = new Firebase('https://giffingawesome.firebaseio.com/users/' + USER + '/settings');
+      settings = $firebaseObject(ref);
+    });
+
+    function getSettings() {
+      return settings;
+    }
+
+    return getSettings;
+  }
+])
+
 .factory('Favorites', ['$firebaseArray', 'Auth',
   function($firebaseArray, Auth) {
     var favorites = null;
