@@ -31,9 +31,11 @@ angular.module('starter.factories', [])
     var settings = null;
 
     Auth.$onAuth(function(authData) {
-      var USER = Auth.authData.uid;
-      var ref = new Firebase('https://giffingawesome.firebaseio.com/users/' + USER + '/settings');
-      settings = $firebaseObject(ref);
+      if (authData !== null) {
+        var USER = authData.uid;
+        var ref = new Firebase('https://giffingawesome.firebaseio.com/users/' + USER + '/settings');
+        settings = $firebaseObject(ref);
+      }
     });
 
     function getSettings() {
@@ -49,9 +51,11 @@ angular.module('starter.factories', [])
     var favorites = null;
 
     Auth.$onAuth(function(authData) {
-      var USER = Auth.authData.uid;
-      var ref = new Firebase('https://giffingawesome.firebaseio.com/users/' + USER + '/favorites');
-      favorites = $firebaseArray(ref);
+      if (authData !== null) {
+        var USER = authData.uid;
+        var ref = new Firebase('https://giffingawesome.firebaseio.com/users/' + USER + '/favorites');
+        favorites = $firebaseArray(ref);
+      }
     });
 
     function addFavorite(image) {

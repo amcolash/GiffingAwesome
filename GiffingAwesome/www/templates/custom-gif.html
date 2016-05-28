@@ -1,13 +1,16 @@
 <ion-modal-view>
   <ion-header-bar class="bar bar-header bar-dark">
     <h1 class="title">Add Custom Gif</h1>
-    <button class="button button-clear button-primary" ng-click="modal.hide()">Cancel</button>
+    <button class="button button-icon icon ion-close" ng-click="modal.hide()"></button>
   </ion-header-bar>
   <ion-content class="padding">
     <div class="list">
+      <div class="center-image" ng-show="!$parent.customGif.failed && $parent.customGif.imgUrl.length > 0">
+        <img ng-src="{{$parent.customGif.imgUrl}}" alt="Custom Gif" customonload>
+      </div>
       <label class="item item-input">
         <i class="icon ion-link placeholder-icon"></i>
-        <input type="text" ng-model="$parent.customGif.imgUrl" placeholder="Url">
+        <input type="text" ng-model="$parent.customGif.imgUrl" ng-change="$parent.customGif.failed = false" placeholder="Url">
       </label>
       <label class="item item-input">
         <i class="icon ion-pound placeholder-icon"></i>

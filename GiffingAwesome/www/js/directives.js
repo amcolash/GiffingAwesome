@@ -33,3 +33,18 @@ angular.module('starter.directives', [])
     }
   };
 })
+
+.directive('customonload', function() {
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+      element.bind('error', function() {
+        console.log('image could not be loaded');
+        scope.customGif.failed = true;
+        scope.$apply();
+      });
+    }
+  };
+})
+
+;

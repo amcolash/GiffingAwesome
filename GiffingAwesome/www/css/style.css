@@ -34,23 +34,23 @@ tags-input .tags .tag-item.selected {
   background: #febbbb;
 }
 
-/* Custom preview style */
+/* Preview style */
 .right-menu {
   padding: 1em;
 }
 
-#center-image {
+.center-image {
   text-align: center;
-  padding: 1em 0;
+  padding: 1em;
 }
-#center-image img {
+
+.center-image img {
   max-width: 100%;
 }
 
 .item-input-wrapper input {
   width: 100%;
 }
-
 
 /* Custom tags style */
 tags-input .host {

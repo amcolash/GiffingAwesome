@@ -206,7 +206,7 @@ angular.module('starter.controllers', [])
   $scope.auth = Auth;
   $scope.preview = previewData;
   $scope.favorites = Favorites;
-  $scope.customGif = { imgUrl: '', tags: [] };
+  $scope.customGif = { imgUrl: '', tags: [], failed: false};
 
   $ionicModal.fromTemplateUrl('templates/custom-gif.html', {
     scope: $scope,
@@ -219,7 +219,7 @@ angular.module('starter.controllers', [])
   };
   // Reset modal on hide
   $scope.$on('modal.hidden', function() {
-    $scope.customGif = { imgUrl: '', tags: [] };
+    $scope.customGif = { imgUrl: '', tags: [], failed: false };
   });
   // Cleanup the modal when we're done with it!
   $scope.$on('$destroy', function() {
