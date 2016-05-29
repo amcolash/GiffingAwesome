@@ -69,7 +69,7 @@ angular.module('starter.controllers', [])
       var search;
       var nsfwFilter = nsfw ? '&sfw=false' : '&sfw=true';
       if ($scope.searchtype === 'Search') {
-        search = 'http://api.gifme.io/v1/search?query=' + $scope.search + '&limit=' + $scope.limit +
+        search = 'https://api.gifme.io/v1/search?query=' + $scope.search + '&limit=' + $scope.limit +
           '&page=' + $scope.offset + nsfw + '&key=rX7kbMzkGu7WJwvG';
       }
 
