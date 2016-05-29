@@ -227,6 +227,7 @@ angular.module('starter.controllers', [])
   $scope.preview = previewData;
   $scope.favorites = Favorites;
   $scope.customGif = { imgUrl: '', tags: [], failed: false};
+  $scope.year = new Date().getFullYear();
 
   $ionicModal.fromTemplateUrl('templates/custom-gif.html', {
     scope: $scope,

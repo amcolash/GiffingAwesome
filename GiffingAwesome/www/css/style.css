@@ -3,6 +3,18 @@
   overflow-y: auto;
 }
 
+/* Slightly darker header / footer */
+.bar.bar-dark {
+  background-color: #222;
+}
+
+/* Logo style */
+.logo {
+  margin-right: 10px;
+  max-height: 30px;
+  vertical-align: middle;
+}
+
 /* Grid style */
 .grid {
   padding: 0.5em;
