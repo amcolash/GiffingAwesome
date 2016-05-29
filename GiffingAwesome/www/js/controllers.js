@@ -44,7 +44,6 @@ angular.module('starter.controllers', [])
         search = 'https://api.giphy.com/v1/gifs/trending?limit=' + $scope.limit +
           '&offset=' + $scope.offset + nsfwFilter + '&api_key=dc6zaTOxFJmzC';
       }
-      console.log(search);
 
       $http.get(search)
         .then(function(response) {
@@ -61,8 +60,6 @@ angular.module('starter.controllers', [])
               tags: []
             }
             img.favorite = $scope.favorites.isFavorite(img);
-
-            console.log(data[i].slug);
 
             $scope.images.push(img);
           }
