@@ -161,7 +161,7 @@ angular.module('starter.controllers', [])
     $scope.offset = 0;
     $scope.lastData = [];
 
-    if ($scope.search !== '') {
+    if ($scope.searchtype === 'Trending' || ($scope.searchtype === 'Search' && $scope.search !== '')) {
       $scope.loadImages();
     }
   }

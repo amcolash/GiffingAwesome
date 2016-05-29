@@ -6,23 +6,39 @@
   <ion-content class="has-header">
 
     <div class="list">
-      <div class="list list-inset">
-        <div class="item item-input" ng-show="$parent.searchtype != 'Trending'">
+      <div class="list list-inset" ng-show="$parent.searchtype != 'Trending'">
+        <div class="item item-input">
           <i class="icon ion-search placeholder-icon"></i>
           <input type="text" ng-model="$parent.search" ng-change="changeSearch()" ng-model-options='{ debounce: 500 }' placeholder="Search">
           <button ng-if="$parent.search.length" class="button-icon input-button placeholder-icon ion-close" ng-click="clearSearch()">
         </div>
       </div>
 
-      <div class="list list-inset">
-        <ion-radio name="searchtype" ng-model="$parent.searchtype" ng-value="'Search'" ng-change="changeSearch()">Search</ion-radio>
-        <ion-radio name="searchtype" ng-model="$parent.searchtype" ng-value="'Trending'" ng-change="changeSearch()">Trending</ion-radio>
+      <div class="list">
+        <div class="row">
+          <div class="col">
+            <ion-radio name="searchtype" ng-model="$parent.searchtype" ng-value="'Search'" ng-change="changeSearch()">Search</ion-radio>
+          </div>
+          <div class="col">
+            <ion-radio name="searchtype" ng-model="$parent.searchtype" ng-value="'Trending'" ng-change="changeSearch()">Trending</ion-radio>
+          </div>
+        </div>
       </div>
 
-      <div class="list list-inset">
-        <ion-radio name="api" ng-model="$parent.api" ng-value="'Giphy'" ng-change="changeSearch()">Giphy</ion-radio>
-        <ion-radio name="api" ng-model="$parent.api" ng-value="'GifMe'" ng-change="changeSearch()" ng-show="$parent.searchtype != 'Trending'">GifMe</ion-radio>
-        <ion-radio name="api" ng-model="$parent.api" ng-value="'Riffsy'" ng-change="changeSearch()">Riffsy</ion-radio>
+      <div class="list">
+        <div class="row">
+          <div class="col">
+            <ion-radio name="api" ng-model="$parent.api" ng-value="'Giphy'" ng-change="changeSearch()">Giphy</ion-radio>
+          </div>
+          <div class="col">
+            <ion-radio name="api" ng-model="$parent.api" ng-value="'Riffsy'" ng-change="changeSearch()">Riffsy</ion-radio>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col col-50">
+            <ion-radio name="api" ng-model="$parent.api" ng-value="'GifMe'" ng-change="changeSearch()" ng-show="$parent.searchtype != 'Trending'">GifMe</ion-radio>            
+          </div>
+        </div>
       </div>
 
       <div class="list list-inset">
