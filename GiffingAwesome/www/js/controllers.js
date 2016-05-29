@@ -50,6 +50,14 @@ angular.module('starter.controllers', [])
 
           // console.log(data);
           for(var i = 0; i < data.length; i++) {
+            // Remove http to remove errors on mixed content
+            // data[i].images.fixed_height_small.url = data[i].images.fixed_height_small.url.replace("https:", "");
+            data[i].images.fixed_height_small.url = data[i].images.fixed_height_small.url.replace("http:", "");
+            // data[i].images.fixed_height.url = data[i].images.fixed_height.url.replace("https:", "");
+            data[i].images.fixed_height.url = data[i].images.fixed_height.url.replace("http:", "");
+            // data[i].images.original.url = data[i].images.original.url.replace("https:", "");
+            data[i].images.original.url = data[i].images.original.url.replace("http:", "");
+
             var img = {
               imgUrl: data[i].images.fixed_height_small.url,
               hqImgUrl: data[i].images.fixed_height.url,
@@ -86,6 +94,10 @@ angular.module('starter.controllers', [])
 
           // console.log(data);
           for(var i = 0; i < data.length; i++) {
+            // Remove http to remove errors on mixed content
+            // data[i].link = data[i].link.replace("https:", "");
+            data[i].link = data[i].link.replace("http:", "");
+
             var img = {
               imgUrl: data[i].link,
               hqImgUrl: data[i].link,
@@ -118,6 +130,14 @@ angular.module('starter.controllers', [])
 
           // console.log(data);
           for(var i = 0; i < data.length; i++) {
+            // Remove http to remove errors on mixed content
+            // data[i].media[0].nanogif.url = data[i].media[0].nanogif.url.replace("https:", "");
+            data[i].media[0].nanogif.url = data[i].media[0].nanogif.url.replace("http:", "");
+            // data[i].media[0].tinygif.url = data[i].media[0].tinygif.url.replace("https:", "");
+            data[i].media[0].tinygif.url = data[i].media[0].tinygif.url.replace("http:", "");
+            // data[i].url = data[i].url.replace("https:", "");
+            data[i].url = data[i].url.replace("http:", "");
+
             var img = {
               imgUrl: data[i].media[0].nanogif.url,
               hqImgUrl: data[i].media[0].tinygif.url,
