@@ -30,6 +30,8 @@ angular.module('starter.controllers', [])
   }
 
   $scope.loadImages = function() {
+    console.log("loading images, offset: " + $scope.offset);
+
     var nsfw = Settings().nsfw || false;
 
     if ($scope.api === 'Giphy') {
@@ -37,35 +39,30 @@ angular.module('starter.controllers', [])
       var nsfwFilter = nsfw ? '' : '&rating=pg-13';
       if ($scope.searchtype === 'Search') {
         search = 'https://api.giphy.com/v1/gifs/search?q=' + $scope.search + '&limit=' + $scope.limit +
-          '&offset=' + $scope.offset + nsfw + '&api_key=dc6zaTOxFJmzC';
+          '&offset=' + $scope.offset + nsfwFilter + '&api_key=dc6zaTOxFJmzC';
       } else if ($scope.searchtype === 'Trending') {
         search = 'https://api.giphy.com/v1/gifs/trending?limit=' + $scope.limit +
-          '&offset=' + $scope.offset + nsfw + '&api_key=dc6zaTOxFJmzC';
+          '&offset=' + $scope.offset + nsfwFilter + '&api_key=dc6zaTOxFJmzC';
       }
+      console.log(search);
 
       $http.get(search)
         .then(function(response) {
           var data = response.data.data;
           $scope.lastData = data;
 
-          // console.log(data);
           for(var i = 0; i < data.length; i++) {
-            // Remove http to remove errors on mixed content
-            // data[i].images.fixed_height_small.url = data[i].images.fixed_height_small.url.replace("https:", "");
-            data[i].images.fixed_height_small.url = data[i].images.fixed_height_small.url.replace("http:", "");
-            // data[i].images.fixed_height.url = data[i].images.fixed_height.url.replace("https:", "");
-            data[i].images.fixed_height.url = data[i].images.fixed_height.url.replace("http:", "");
-            // data[i].images.original.url = data[i].images.original.url.replace("https:", "");
-            data[i].images.original.url = data[i].images.original.url.replace("http:", "");
-
             var img = {
               imgUrl: data[i].images.fixed_height_small.url,
+              // imgUrl: 'https://placehold.it/' + (i + $scope.offset + 100) + 'x' + (i + $scope.offset + 100),
               hqImgUrl: data[i].images.fixed_height.url,
               originalImgUrl: data[i].images.original.url,
               failed: false,
               tags: []
             }
             img.favorite = $scope.favorites.isFavorite(img);
+
+            console.log(data[i].slug);
 
             $scope.images.push(img);
           }
@@ -78,7 +75,7 @@ angular.module('starter.controllers', [])
       var nsfwFilter = nsfw ? '&sfw=false' : '&sfw=true';
       if ($scope.searchtype === 'Search') {
         search = 'https://api.gifme.io/v1/search?query=' + $scope.search + '&limit=' + $scope.limit +
-          '&page=' + $scope.offset + nsfw + '&key=rX7kbMzkGu7WJwvG';
+          '&page=' + $scope.offset + nsfwFilter + '&key=rX7kbMzkGu7WJwvG';
       }
 
       $http.get(search)
@@ -94,10 +91,6 @@ angular.module('starter.controllers', [])
 
           // console.log(data);
           for(var i = 0; i < data.length; i++) {
-            // Remove http to remove errors on mixed content
-            // data[i].link = data[i].link.replace("https:", "");
-            data[i].link = data[i].link.replace("http:", "");
-
             var img = {
               imgUrl: data[i].link,
               hqImgUrl: data[i].link,
@@ -130,14 +123,6 @@ angular.module('starter.controllers', [])
 
           // console.log(data);
           for(var i = 0; i < data.length; i++) {
-            // Remove http to remove errors on mixed content
-            // data[i].media[0].nanogif.url = data[i].media[0].nanogif.url.replace("https:", "");
-            data[i].media[0].nanogif.url = data[i].media[0].nanogif.url.replace("http:", "");
-            // data[i].media[0].tinygif.url = data[i].media[0].tinygif.url.replace("https:", "");
-            data[i].media[0].tinygif.url = data[i].media[0].tinygif.url.replace("http:", "");
-            // data[i].url = data[i].url.replace("https:", "");
-            data[i].url = data[i].url.replace("http:", "");
-
             var img = {
               imgUrl: data[i].media[0].nanogif.url,
               hqImgUrl: data[i].media[0].tinygif.url,
