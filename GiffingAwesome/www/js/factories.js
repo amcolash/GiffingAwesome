@@ -54,9 +54,10 @@ angular.module('starter.factories', [])
   }
 ])
 
-.factory('Favorites', ['$firebaseArray', 'Auth',
-  function($firebaseArray, Auth) {
+.factory('Favorites', ['$firebaseArray', 'Auth', 'Storage',
+  function($firebaseArray, Auth, Storage) {
     var favorites = null;
+    var storage = Storage;
 
     Auth.$onAuthStateChanged(function(authData) {
       if (authData !== null) {
@@ -73,7 +74,9 @@ angular.module('starter.factories', [])
         hqImgUrl: image.hqImgUrl,
         originalImgUrl: image.originalImgUrl,
         favorite: image.favorite,
-        tags: image.tags
+        tags: image.tags,
+        // Only used with custom uploaded files
+        filename: image.filename || null
       }
       favorites.$add(customImage);
     }
@@ -81,6 +84,9 @@ angular.module('starter.factories', [])
     function removeFavorite(image) {
       for (var i = 0; i < favorites.length; i++) {
         if (favorites[i].originalImgUrl === image.originalImgUrl) {
+          if (favorites[i].filename !== undefined && favorites[i].filename !== null) {
+            storage().child(favorites[i].filename).delete();
+          }
           favorites.$remove(i);
           return;
         }
@@ -128,19 +134,23 @@ angular.module('starter.factories', [])
   }
 ])
 
-.factory('Storage', ['$window', 'Auth',
-  function($window, Auth) {
+.factory('Storage', ['Auth',
+  function(Auth) {
     var storage = null;
 
     Auth.$onAuthStateChanged(function(authData) {
       if (authData !== null) {
         var USER = authData.uid;
-        // var storageRef = $window.firebase.storage().ref();
-        // var userRef = storageRef.child('users/' + USER + '/uploads');
 
+        var storageRef = firebase.storage().ref();
+        storage = storageRef.child('users/' + USER + '/uploads');
       }
     });
 
-    return {storage: 'yay'};
+    function getStorage() {
+      return storage;
+    }
+
+    return getStorage;
   }
 ])

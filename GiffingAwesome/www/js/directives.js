@@ -53,8 +53,8 @@ angular.module('starter.directives', [])
     link: function (scope, element, attributes) {
       element.bind('change', function () {
         $parse(attributes.fileInput)
-        .assign(scope,element[0].files)
-        scope.$apply()
+          .assign(scope, element[0].files);
+        scope.$apply();
       });
     }
   };
