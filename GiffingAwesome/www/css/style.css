@@ -15,6 +15,16 @@
   vertical-align: middle;
 }
 
+/* Custom file upload button */
+.file-upload {
+  color: #aaa;
+}
+
+.file-upload input.file-input {
+  visibility: hidden;
+  width: 0;
+}
+
 /* Grid style */
 .grid {
   padding: 0.5em;
@@ -77,7 +87,6 @@ tags-input .tags {
   border: none;
   box-shadow: none;
 }
-
 
 tags-input .tags .input {
   margin: 0px;

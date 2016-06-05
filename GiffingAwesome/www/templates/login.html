@@ -6,13 +6,13 @@
         <h1>You are logged in!</h1>
         <p>Hello, {{auth.authData.facebook.displayName}}{{auth.authData.twitter.displayName}}{{auth.authData.google.displayName}}</p>
         <p>uid: {{auth.authData.uid}}</p>
-        <button class="button button-block button-dark" ng-click="auth.$unauth()">Logout</button>
+        <button class="button button-block button-dark" ng-click="auth.$signOut()">Logout</button>
       </div>
       <div ng-hide="auth.authData">
         <h1>Welcome, please log in.</h1>
-        <button class="button button-block icon-left ion-social-facebook button-positive" ng-click="auth.$authWithOAuthPopup('facebook')"> Login With Facebook</button>
-        <button class="button button-block icon-left ion-social-twitter button-calm" ng-click="auth.$authWithOAuthPopup('twitter')"> Login With Twitter</button>
-        <button class="button button-block icon-left ion-social-google button-assertive" ng-click="auth.$authWithOAuthPopup('google')"> Login With Google</button>
+        <button class="button button-block icon-left ion-social-facebook button-positive" ng-click="auth.$signInWithPopup('facebook')"> Login With Facebook</button>
+        <button class="button button-block icon-left ion-social-twitter button-calm" ng-click="auth.$signInWithPopup('twitter')"> Login With Twitter</button>
+        <button class="button button-block icon-left ion-social-google button-assertive" ng-click="auth.$signInWithPopup('google')"> Login With Google</button>
       </div>
     </div>
   </ion-content>

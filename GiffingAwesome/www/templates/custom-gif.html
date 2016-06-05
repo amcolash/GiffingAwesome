@@ -8,7 +8,23 @@
       <div class="center-image" ng-show="!$parent.customGif.failed && $parent.customGif.imgUrl.length > 0">
         <img ng-src="{{$parent.customGif.imgUrl}}" alt="Custom Gif" customonload>
       </div>
-      <label class="item item-input">
+
+      <div class="row">
+        <div class="col">
+          <ion-radio ng-model="$parent.customType" ng-value="'upload'">Upload Gif</ion-radio>
+        </div>
+        <div class="col">
+          <ion-radio ng-model="$parent.customType" ng-value="'link'">Custom URL</ion-radio>
+        </div>
+      </div>
+
+      <label ng-show="$parent.customType === 'upload'" class="button button-full button-dark file-upload">
+        <i class="icon ion-upload placeholder-icon"></i>
+        {{files ? files[0].name : "Choose File"}}
+        <input type="file" class="file-input" file-input="files"/>
+      </label>
+
+      <label ng-show="$parent.customType === 'link'" class="item item-input">
         <i class="icon ion-link placeholder-icon"></i>
         <input type="text" ng-model="$parent.customGif.imgUrl" ng-change="$parent.customGif.failed = false" placeholder="Url">
       </label>

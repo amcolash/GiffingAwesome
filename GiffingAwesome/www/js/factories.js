@@ -8,11 +8,19 @@ angular.module('starter.factories', [])
 })
 
 .factory('Auth', ['$firebaseAuth', '$state', function($firebaseAuth, $state) {
-    var ref = new Firebase('https://giffingawesome.firebaseio.com');
-    var auth = $firebaseAuth(ref);
+    // Init firebase 3.x.x
+    var config = {
+      apiKey: "AIzaSyDvGo3D5AhgdzcAbli3H3lXuawv-yeOoao",
+      authDomain: "giffingawesome.firebaseapp.com",
+      databaseURL: "https://giffingawesome.firebaseio.com",
+      storageBucket: "firebase-giffingawesome.appspot.com",
+    };
+    firebase.initializeApp(config);
+
+    var auth = $firebaseAuth();
 
     // any time auth status updates, add the user data to scope
-    auth.$onAuth(function(authData) {
+    auth.$onAuthStateChanged(function(authData) {
       auth.authData = authData;
 
       if (authData === null || authData === undefined) {
@@ -30,10 +38,10 @@ angular.module('starter.factories', [])
   function($firebaseObject, Auth) {
     var settings = null;
 
-    Auth.$onAuth(function(authData) {
+    Auth.$onAuthStateChanged(function(authData) {
       if (authData !== null) {
         var USER = authData.uid;
-        var ref = new Firebase('https://giffingawesome.firebaseio.com/users/' + USER + '/settings');
+        var ref = firebase.database().ref('users/' + USER + '/settings');
         settings = $firebaseObject(ref);
       }
     });
@@ -50,10 +58,10 @@ angular.module('starter.factories', [])
   function($firebaseArray, Auth) {
     var favorites = null;
 
-    Auth.$onAuth(function(authData) {
+    Auth.$onAuthStateChanged(function(authData) {
       if (authData !== null) {
         var USER = authData.uid;
-        var ref = new Firebase('https://giffingawesome.firebaseio.com/users/' + USER + '/favorites');
+        var ref = firebase.database().ref('users/' + USER + '/favorites');
         favorites = $firebaseArray(ref);
       }
     });
@@ -117,5 +125,22 @@ angular.module('starter.factories', [])
       getFavorites: getFavorites,
       isFavorite: isFavorite,
     };
+  }
+])
+
+.factory('Storage', ['$window', 'Auth',
+  function($window, Auth) {
+    var storage = null;
+
+    Auth.$onAuthStateChanged(function(authData) {
+      if (authData !== null) {
+        var USER = authData.uid;
+        // var storageRef = $window.firebase.storage().ref();
+        // var userRef = storageRef.child('users/' + USER + '/uploads');
+
+      }
+    });
+
+    return {storage: 'yay'};
   }
 ])

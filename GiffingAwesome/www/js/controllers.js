@@ -203,13 +203,14 @@ angular.module('starter.controllers', [])
 
 }])
 
-.controller('MenuController', ['$scope', 'Auth', 'previewData', '$ionicModal', 'Favorites',
-  function($scope, Auth, previewData, $ionicModal, Favorites) {
+.controller('MenuController', ['$scope', 'Auth', 'previewData', '$ionicModal', 'Favorites', 'Storage',
+  function($scope, Auth, previewData, $ionicModal, Favorites, Storage) {
   $scope.auth = Auth;
   $scope.preview = previewData;
   $scope.favorites = Favorites;
   $scope.customGif = { imgUrl: '', tags: [], failed: false};
   $scope.year = new Date().getFullYear();
+  $scope.customType = 'upload';
 
   $ionicModal.fromTemplateUrl('templates/custom-gif.html', {
     scope: $scope,
@@ -240,6 +241,10 @@ angular.module('starter.controllers', [])
     $scope.favorites.addFavorite(image);
 
     $scope.modal.hide();
+  };
+
+  $scope.logFile = function() {
+    console.log($scope.customGif);
   };
 
 }])
