@@ -56,10 +56,10 @@ angular.module('starter.controllers', [])
               // imgUrl: 'https://placehold.it/' + (i + $scope.offset + 100) + 'x' + (i + $scope.offset + 100),
               hqImgUrl: data[i].images.fixed_height.url,
               originalImgUrl: data[i].images.original.url,
-              failed: false,
-              tags: []
+              failed: false
             }
             img.favorite = $scope.favorites.isFavorite(img);
+            img.tags = $scope.favorites.getTags(img);
 
             $scope.images.push(img);
           }
@@ -92,10 +92,10 @@ angular.module('starter.controllers', [])
               imgUrl: data[i].link,
               hqImgUrl: data[i].link,
               originalImgUrl: data[i].link,
-              failed: false,
-              tags: []
+              failed: false
             }
             img.favorite = $scope.favorites.isFavorite(img);
+            img.tags = $scope.favorites.getTags(img);
 
             $scope.images.push(img);
           }
@@ -124,10 +124,10 @@ angular.module('starter.controllers', [])
               imgUrl: data[i].media[0].nanogif.url,
               hqImgUrl: data[i].media[0].tinygif.url,
               originalImgUrl: data[i].url,
-              failed: false,
-              tags: []
+              failed: false
             }
             img.favorite = $scope.favorites.isFavorite(img);
+            img.tags = $scope.favorites.getTags(img);
 
             $scope.images.push(img);
           }
@@ -171,6 +171,10 @@ angular.module('starter.controllers', [])
       $scope.favorites.removeFavorite(image);
     }
   }
+
+  $scope.updateTags = function(image) {
+    $scope.favorites.updateTags(image);
+  };
 }])
 
 .controller('FavoritesController', ['$scope', 'previewData', 'Favorites',

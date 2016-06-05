@@ -124,12 +124,23 @@ angular.module('starter.factories', [])
       return false;
     }
 
+    function getTags(image) {
+      for (var i = 0; i < favorites.length; i++) {
+        if (favorites[i].originalImgUrl === image.originalImgUrl) {
+          return favorites[i].tags;
+        }
+      }
+
+      return [];
+    }
+
     return {
       addFavorite: addFavorite,
       removeFavorite: removeFavorite,
       updateTags: updateTags,
       getFavorites: getFavorites,
       isFavorite: isFavorite,
+      getTags: getTags,
     };
   }
 ])

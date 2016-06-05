@@ -49,6 +49,7 @@
     <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'>
       <div class="grid-item card" ng-repeat="image in images" ng-hide="image.failed">
         <img ng-src="{{$parent.hq ? image.hqImgUrl : image.imgUrl}}" ng-click="setupPreview(image)" menu-toggle="right" gridonload/>
+        <tags-input ng-show="image.favorite" ng-model="image.tags" on-tag-added="updateTags({image: image, tag: $tag})" on-tag-removed="updateTags({image: image, tag: $tag})"></tags-input>
         <div class="row">
           <div class="col">
             <button class="button icon" ng-click="onFavorite(image)"
