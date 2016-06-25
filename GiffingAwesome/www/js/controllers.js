@@ -238,19 +238,28 @@ angular.module('starter.controllers', [])
   });
 
   $scope.addCustomGif = function() {
+    console.log($scope.customType);
     if ($scope.customType === 'link') {
-      var image = {
-        imgUrl: $scope.customGif.imgUrl,
-        hqImgUrl: $scope.customGif.imgUrl,
-        originalImgUrl: $scope.customGif.imgUrl,
-        favorite: true,
-        tags: $scope.customGif.tags
-      }
-      $scope.favorites.addFavorite(image);
+      if ($scope.customGif.imgUrl !== "") {
+        var image = {
+          imgUrl: $scope.customGif.imgUrl,
+          hqImgUrl: $scope.customGif.imgUrl,
+          originalImgUrl: $scope.customGif.imgUrl,
+          favorite: true,
+          tags: $scope.customGif.tags
+        }
+        $scope.favorites.addFavorite(image);
 
-      $scope.modal.hide();
+        $scope.modal.hide();
+      } else {
+        console.error("No url given!");
+      }
     } else {
-      $scope.uploadCustomGif();
+      if ($scope.files !== undefined) {
+        $scope.uploadCustomGif();
+      } else {
+        console.error("No file selected to upload!");
+      }
     }
   };
 
