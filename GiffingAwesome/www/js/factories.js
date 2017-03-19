@@ -73,10 +73,14 @@ angular.module('starter.factories', [])
         imgUrl: image.imgUrl,
         hqImgUrl: image.hqImgUrl,
         originalImgUrl: image.originalImgUrl,
+        thumbnailUrl: image.thumbnailUrl,
+        hqThumbnailUrl: image.hqThumbnailUrl,
         favorite: image.favorite,
         tags: image.tags,
         // Only used with custom uploaded files
-        filename: image.filename || null
+        filename: image.filename || null,
+        thumbnailName: image.thumbnailName || null,
+        hqThumbnailName: image.hqThumbnailName || null,
       }
       favorites.$add(customImage);
     }
@@ -87,6 +91,13 @@ angular.module('starter.factories', [])
           if (favorites[i].filename !== undefined && favorites[i].filename !== null) {
             storage().child(favorites[i].filename).delete();
           }
+          if (favorites[i].thumbnailName !== undefined && favorites[i].thumbnailName !== null) {
+            storage().child(favorites[i].thumbnailName).delete();
+          }
+          if (favorites[i].hqThumbnailName !== undefined && favorites[i].hqThumbnailName !== null) {
+            storage().child(favorites[i].hqThumbnailName).delete();
+          }
+
           favorites.$remove(i);
           return;
         }
@@ -100,7 +111,7 @@ angular.module('starter.factories', [])
 
       for (var i = 0; i < favorites.length; i++) {
         if (favorites[i].originalImgUrl === image.originalImgUrl) {
-          image.tags = image.tags || [tag];
+          image.tags = image.tags || (tag ? [tag] : null);
           favorites[i].tags = image.tags;
           favorites.$save(i);
         }

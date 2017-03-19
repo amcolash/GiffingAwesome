@@ -204,19 +204,47 @@ angular.module('starter.controllers', [])
     $scope.mobile = (ionic.Platform.isAndroid() || ionic.Platform.isIOS() || ionic.Platform.isWindowsPhone()) && !ionic.Platform.is('tablet');
     $scope.animate = !$scope.mobile;
 
+    var numGen = 0;
+
     // Generate missing thumbnails. For now, custom gifs will need to be generated from here (also includes old images that do not contain the thumbnail code that was added)
     for (var i = 0; i < $scope.favorites.getFavorites().length; i++) {
       var image = $scope.favorites.getFavorites()[i];
 
       // Generate normal thumbnail if missing
       if (!image.thumbnailUrl || $scope.regen) {
+        numGen++;
+        console.log("generating normal thumbnail for: " + JSON.stringify(image));
+        if (image.thumbnailUrl && image.thumbnailName) {
+          // If there is an existing thumbnail, delete it
+          $scope.storage().child(image.thumbnailName).delete().then(function() {
+            // Deleted successfully
+          }).catch(function(error) {
+            // Something went wrong or the file does not exist
+          });
+        }
+
         $scope.generateThumbnail(image, false);
       }
 
       // Generate hq thumbnail if missing
       if (!image.hqThumbnailUrl || $scope.regen) {
+        numGen++;
+        console.log("generating hq thumbnail for: " + JSON.stringify(image));
+        if (image.hqThumbnailUrl && image.hqThumbnailName) {
+          // If there is an existing thumbnail, delete it
+          $scope.storage().child(image.hqThumbnailName).delete().then(function() {
+            // Deleted successfully
+          }).catch(function(error) {
+            // Something went wrong or the file does not exist
+          });
+        }
+
         $scope.generateThumbnail(image, true);
       }
+    }
+
+    if (numGen > 0) {
+      console.log("total gen: " + numGen);
     }
   });
 
@@ -267,8 +295,10 @@ angular.module('starter.controllers', [])
 
       if (hq) {
         image.hqThumbnailUrl = downloadURL;
+        image.hqThumbnailName = file.name;
       } else {
         image.thumbnailUrl = downloadURL;
+        image.thumbnailName = file.name;
       }
 
       // Make a temp "image" object, it is slightly different when using updateTags()
