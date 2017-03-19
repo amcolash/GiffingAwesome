@@ -44,11 +44,14 @@
       <div class="list list-inset">
         <ion-toggle ng-model="$parent.hq" ng-disabled="$parent.api == 'GifMe'" toggle-class="toggle-calm">High Quality</ion-toggle>
       </div>
+      <div class="list list-inset">
+        <ion-toggle ng-model="$parent.animate" toggle-class="toggle-calm">Automatically Play Gifs</ion-toggle>
+      </div>
     </div>
 
     <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'>
       <div class="grid-item card" ng-repeat="image in images" ng-hide="image.failed">
-        <img ng-src="{{$parent.hq ? image.hqImgUrl : image.imgUrl}}" ng-click="setupPreview(image)" menu-toggle="right" gridonload/>
+        <img ng-src="{{$parent.hq ? ($parent.animate || !image.hqThumbnailUrl ? image.hqImgUrl : image.hqThumbnailUrl) : ($parent.animate || !image.thumbnailUrl ? image.imgUrl : image.thumbnailUrl)}}" ng-click="setupPreview(image)" menu-toggle="right" gridonload/>
         <tags-input ng-show="image.favorite" ng-model="image.tags" on-tag-added="updateTags({image: image, tag: $tag})" on-tag-removed="updateTags({image: image, tag: $tag})"></tags-input>
         <div class="row">
           <div class="col">

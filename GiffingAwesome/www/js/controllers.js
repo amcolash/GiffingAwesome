@@ -13,15 +13,22 @@ angular.module('starter.controllers', [])
   $scope.api = 'Giphy';
   $scope.searchtype = 'Search';
   $scope.hq = false;
+  $scope.mobile = false;
+  $scope.animate = true;
   $scope.search = '';
 
   $scope.images = [];
   $scope.offset = 0;
-  $scope.limit = 25;
+  $scope.mobileLimit = 10;
+  $scope.desktopLimit = 25;
   $scope.lastData = [];
 
   // run changeSearch each time the view is entered - that way, favorites are synced
   $scope.$on('$ionicView.enter', function() {
+    $scope.mobile = (ionic.Platform.isAndroid() || ionic.Platform.isIOS() || ionic.Platform.isWindowsPhone()) && !ionic.Platform.is('tablet');
+    $scope.animate = !$scope.mobile;
+    $scope.limit = $scope.mobile ? $scope.mobileLimit : $scope.desktopLimit;
+
     $scope.changeSearch();
   })
 
@@ -53,8 +60,10 @@ angular.module('starter.controllers', [])
           for(var i = 0; i < data.length; i++) {
             var img = {
               imgUrl: data[i].images.fixed_height_small.url,
+              thumbnailUrl: data[i].images.fixed_height_small_still.url,
               // imgUrl: 'https://placehold.it/' + (i + $scope.offset + 100) + 'x' + (i + $scope.offset + 100),
               hqImgUrl: data[i].images.fixed_height.url,
+              hqThumbnailUrl: data[i].images.fixed_height_still.url,
               originalImgUrl: data[i].images.original.url,
               failed: false
             }
@@ -90,7 +99,9 @@ angular.module('starter.controllers', [])
           for(var i = 0; i < data.length; i++) {
             var img = {
               imgUrl: data[i].link,
+              thumbnailUrl: data[i].thumb,
               hqImgUrl: data[i].link,
+              hqThumbnailUrl: data[i].thumb,
               originalImgUrl: data[i].link,
               failed: false
             }
@@ -122,7 +133,9 @@ angular.module('starter.controllers', [])
           for(var i = 0; i < data.length; i++) {
             var img = {
               imgUrl: data[i].media[0].nanogif.url,
-              hqImgUrl: data[i].media[0].tinygif.url,
+              thumbnailUrl: data[i].media[0].nanogif.preview,
+              hqImgUrl: data[i].media[0].gif.url,
+              hqThumbnailUrl: data[i].media[0].gif.preview,
               originalImgUrl: data[i].url,
               failed: false
             }
@@ -181,6 +194,13 @@ angular.module('starter.controllers', [])
   function($scope, previewData, Favorites) {
   $scope.preview = previewData;
   $scope.favorites = Favorites;
+  $scope.mobile = false;
+  $scope.animate = true;
+
+  $scope.$on('$ionicView.enter', function() {
+    $scope.mobile = (ionic.Platform.isAndroid() || ionic.Platform.isIOS() || ionic.Platform.isWindowsPhone()) && !ionic.Platform.is('tablet');
+    $scope.animate = !$scope.mobile;
+  });
 
   $scope.setupPreview = function(image) {
     $scope.preview.isLoaded = $scope.preview.url === image.originalImgUrl;
