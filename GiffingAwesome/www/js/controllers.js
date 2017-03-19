@@ -197,10 +197,87 @@ angular.module('starter.controllers', [])
   $scope.mobile = false;
   $scope.animate = true;
 
+  // debug option to regenerate all favorites thumbnails
+  $scope.regen = false;
+
   $scope.$on('$ionicView.enter', function() {
     $scope.mobile = (ionic.Platform.isAndroid() || ionic.Platform.isIOS() || ionic.Platform.isWindowsPhone()) && !ionic.Platform.is('tablet');
     $scope.animate = !$scope.mobile;
+
+    // Generate missing thumbnails. For now, custom gifs will need to be generated from here (also includes old images that do not contain the thumbnail code that was added)
+    for (var i = 0; i < $scope.favorites.getFavorites().length; i++) {
+      var image = $scope.favorites.getFavorites()[i];
+
+      // Generate normal thumbnail if missing
+      if (!image.thumbnailUrl || $scope.regen) {
+        $scope.generateThumbnail(image, false);
+      }
+
+      // Generate hq thumbnail if missing
+      if (!image.hqThumbnailUrl || $scope.regen) {
+        $scope.generateThumbnail(image, true);
+      }
+    }
   });
+
+  $scope.generateThumbnail = function(image, hq) {
+    var myCan = document.createElement('canvas');
+    var img = new Image();
+    img.setAttribute('crossOrigin', 'anonymous');
+    img.src = hq ? image.hqImgUrl : image.imgUrl;
+    img.onload = function () {
+
+      var size = hq ? 400 : 200;
+      if (img.height > img.width) {
+        myCan.height = size;
+        myCan.width = Number((img.height / img.width) * size);
+      } else {
+        myCan.height = Number((img.height / img.width) * size);
+        myCan.width = size;
+      }
+
+      if (myCan.getContext) {
+        var cntxt = myCan.getContext("2d");
+        cntxt.drawImage(img, 0, 0, myCan.width, myCan.height);
+
+        myCan.toBlob(function(blob) {
+          var file = blob;
+          var name = new Date().getTime().toString() + image.$id + '.png';
+          file.lastModifiedDate = new Date();
+          file.name = name;
+
+          $scope.uploadThumbnail(image, file, hq);
+        });
+      }
+    }
+  }
+
+  $scope.uploadThumbnail = function(image, file, hq) {
+    var uploadTask = $scope.storage().child(file.name).put(file);
+
+    uploadTask.on('state_changed', function(snapshot) {
+      // Uploading
+    }, function(error) {
+      // Handle unsuccessful uploads
+    }, function() {
+      // Handle successful uploads
+      var downloadURL = uploadTask.snapshot.downloadURL;
+      // Remove token from the url
+      downloadURL = downloadURL.substring(0, downloadURL.indexOf('&token'));
+
+      if (hq) {
+        image.hqThumbnailUrl = downloadURL;
+      } else {
+        image.thumbnailUrl = downloadURL;
+      }
+
+      // Make a temp "image" object, it is slightly different when using updateTags()
+      var temp = {};
+      temp.image = image;
+
+      $scope.favorites.updateTags(temp);
+    })
+  }
 
   $scope.setupPreview = function(image) {
     $scope.preview.isLoaded = $scope.preview.url === image.originalImgUrl;
