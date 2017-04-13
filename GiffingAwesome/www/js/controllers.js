@@ -427,12 +427,66 @@ angular.module('starter.controllers', [])
 
 }])
 
-.controller('SettingsController', ['$scope', 'Settings', function($scope, Settings) {
+.controller('SettingsController', ['$scope', 'Settings', 'Auth', function($scope, Settings, Auth) {
+  $scope.auth = Auth;
   Settings().$bindTo($scope, 'settings');
+
+  $scope.hideGoogle = false;
+  $scope.hideTwitter = false;
+
+  for (var i = 0; i < Auth.authData.providerData.length; i++) {
+    if (Auth.authData.providerData[i].providerId === "google.com") {
+      $scope.hideGoogle = true;
+    } else if (Auth.authData.providerData[i].providerId === "twitter.com") {
+      $scope.hideTwitter = true;
+    }
+  }
 }])
 
-.controller('LoginController', ['$scope', 'Auth', function($scope, Auth) {
+.controller('LoginController', ['$scope', 'Auth', 'keys', '$cordovaOauth', function($scope, Auth, keys, $cordovaOauth) {
   $scope.auth = Auth;
+
+  $scope.login = function(authMethod) {
+    // Redirect login method
+    if(ionic.Platform.isAndroid()) {
+      if(authMethod === "google") {
+        window.plugins.googleplus.login({
+          'webClientId': keys.googleId,
+    	    'offline': true
+        },
+        function (oauth) {
+          var credential = firebase.auth.GoogleAuthProvider.credential(oauth.idToken);
+          $scope.auth.$signInWithCredential(credential).then(function(authData) {
+            console.log("Signed in as: " + authData.uid);
+          }).catch(function(error) {
+            console.error("Authentication failed: " + JSON.stringify(error))
+          });
+        },
+        function (msg) {
+          console.error('Error: ' + JSON.stringify(msg));
+        });
+      } else if (authMethod == "twitter") {
+        $cordovaOauth.twitter(keys.twitterId, keys.twitterSecret).then(function(oauth) {
+          var credential = firebase.auth.TwitterAuthProvider.credential(oauth.oauth_token, oauth.oauth_token_secret);
+          $scope.auth.$signInWithCredential(credential).then(function(authData) {
+            console.log("Signed in as: " + authData.uid);
+          }).catch(function(error) {
+            console.error("Authentication failed: " + JSON.stringify(error));
+          });
+        }, function(error) {
+          console.error("Error: " + JSON.stringify(error));
+        });
+      }
+    } else {
+      // Default popup on desktop
+      console.log("attempting to log in with popup")
+      $scope.auth.$signInWithPopup(authMethod).then(function(authData) {
+        console.log("Signed in as:", authData.uid);
+      }).catch(function(error) {
+        console.log(JSON.stringify(error));
+      });
+    }
+  }
 }])
 
 ;

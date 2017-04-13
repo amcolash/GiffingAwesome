@@ -4,11 +4,11 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 var ionicApp = angular.module('starter', ['ionic', 'starter.controllers', 'starter.factories',
-  'starter.directives', 'angular-clipboard', 'firebase', 'ngTagsInput'])
+  'starter.directives', 'starter.keys', 'angular-clipboard', 'firebase', 'ngTagsInput', 'ngCordovaOauth'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
-    if(window.cordova && window.cordova.plugins.Keyboard) {
+    if(window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -18,6 +18,7 @@ var ionicApp = angular.module('starter', ['ionic', 'starter.controllers', 'start
       // a much nicer keyboard experience.
       cordova.plugins.Keyboard.disableScroll(true);
     }
+
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
@@ -43,7 +44,9 @@ var ionicApp = angular.module('starter', ['ionic', 'starter.controllers', 'start
 }])
 
 .config(function($ionicConfigProvider) {
-  $ionicConfigProvider.scrolling.jsScrolling(false);
+  if (!ionic.Platform.isAndroid()) {
+    $ionicConfigProvider.scrolling.jsScrolling(false);
+  }
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
