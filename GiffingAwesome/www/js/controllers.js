@@ -430,16 +430,95 @@ angular.module('starter.controllers', [])
 .controller('SettingsController', ['$scope', 'Settings', 'Auth', function($scope, Settings, Auth) {
   $scope.auth = Auth;
   Settings().$bindTo($scope, 'settings');
+  $scope.googleAuth = {};
+  $scope.twitterAuth = {};
 
-  $scope.hideGoogle = false;
-  $scope.hideTwitter = false;
+  $scope.updateProviders = function() {
+    $scope.googleAuth = {};
+    $scope.twitterAuth = {};
 
-  for (var i = 0; i < Auth.authData.providerData.length; i++) {
-    if (Auth.authData.providerData[i].providerId === "google.com") {
-      $scope.hideGoogle = true;
-    } else if (Auth.authData.providerData[i].providerId === "twitter.com") {
-      $scope.hideTwitter = true;
+    for (var i = 0; i < Auth.authData.providerData.length; i++) {
+      if (Auth.authData.providerData[i].providerId === "google.com") {
+        $scope.googleAuth = Auth.authData.providerData[i];
+      } else if (Auth.authData.providerData[i].providerId === "twitter.com") {
+        $scope.twitterAuth = Auth.authData.providerData[i];
+      }
     }
+  }
+
+  // Do this after the function is defined
+  $scope.updateProviders();
+
+  $scope.unlink = function(authMethod) {
+    if (authMethod === "google") {
+      var id = $scope.googleAuth.providerId;
+    } else if (authMethod === "twitter") {
+      var id = $scope.twitterAuth.providerId;
+    }
+
+    $scope.auth.authData.unlink(id).then(function(result) {
+      console.log("Success unlinking: " + result);
+      $scope.updateProviders();
+    }).catch(function(error) {
+      console.error("Error: " + error);
+      $scope.updateProviders();
+    });
+
+  }
+
+  $scope.link = function(authMethod) {
+    console.log($scope.auth)
+
+    if (ionic.Platform.isAndroid()) {
+      if(authMethod === "google") {
+        window.plugins.googleplus.login({
+          'webClientId': keys.googleId,
+    	    'offline': true
+        },
+        function (oauth) {
+          var credential = firebase.auth.GoogleAuthProvider.credential(oauth.idToken);
+          $scope.auth.$link(credential).then(function(result) {
+            console.log("Success linking: " + result);
+            $scope.updateProviders();
+          }).catch(function(error) {
+            console.error("Error: " + error);
+            $scope.updateProviders();
+          });
+        },
+        function (msg) {
+          console.error('Error: ' + JSON.stringify(msg));
+        });
+      } else if (authMethod === "twitter") {
+        $cordovaOauth.twitter(keys.twitterId, keys.twitterSecret).then(function(oauth) {
+          var credential = firebase.auth.TwitterAuthProvider.credential(oauth.oauth_token, oauth.oauth_token_secret);
+          $scope.auth.$link(credential).then(function(result) {
+            console.log("Success linking: " + result);
+            $scope.updateProviders();
+          }).catch(function(error) {
+            console.error("Error: " + error);
+            $scope.updateProviders();
+          });
+        }, function(error) {
+          console.error("Error: " + JSON.stringify(error));
+        });
+      }
+    } else {
+      if (authMethod === "google") {
+        var provider = new firebase.auth.GoogleAuthProvider();
+      } else if (authMethod === "twitter") {
+        var provider = new firebase.auth.TwitterAuthProvider();
+      }
+
+      $scope.auth.authData.linkWithPopup(provider).then(function(result) {
+        console.log("Success linking: " + result);
+        $scope.updateProviders();
+      }).catch(function(error) {
+        console.error("Error: " + error);
+        $scope.updateProviders();
+      });
+
+    }
+
   }
 }])
 
@@ -465,7 +544,7 @@ angular.module('starter.controllers', [])
         function (msg) {
           console.error('Error: ' + JSON.stringify(msg));
         });
-      } else if (authMethod == "twitter") {
+      } else if (authMethod === "twitter") {
         $cordovaOauth.twitter(keys.twitterId, keys.twitterSecret).then(function(oauth) {
           var credential = firebase.auth.TwitterAuthProvider.credential(oauth.oauth_token, oauth.oauth_token_secret);
           $scope.auth.$signInWithCredential(credential).then(function(authData) {
