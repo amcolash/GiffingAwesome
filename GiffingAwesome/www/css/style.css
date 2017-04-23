@@ -1,7 +1,14 @@
+/* Universal stuff */
+.center-text {
+  text-align: center;
+}
+
 /* Overwrite default ionic scroll bar behavior */
+/*
 .overflow-scroll {
   overflow-y: auto;
 }
+*/
 
 /* Slightly darker header / footer */
 .bar.bar-dark {
@@ -17,15 +24,15 @@
 
 /* Custom Progressbar */
 progress::-moz-progress-bar {
-  background: #444444;
+  background: #444;
 }
 
 progress::-webkit-progress-value {
-  background: #444444;
+  background: #444;
 }
 
 progress {
-  color: #444444;
+  color: #444;
   border: 1px solid #0063a6;
   background: #fff;
 }

@@ -1,62 +1,34 @@
-<ion-side-menus ng-controller="MenuController">
+<ion-side-menus>
   <ion-pane ion-side-menu-content>
     <ion-nav-bar class="bar-dark">
     </ion-nav-bar>
     <ion-nav-view name="menuContent" animation="slide-left-right"></ion-nav-view>
   </ion-pane>
 
-  <ion-side-menu side="left">
+  <ion-side-menu side="left" drag-content="false">
     <header class="bar bar-header bar-dark">
       <h1 class="title">GiffingAwesome</h1>
     </header>
 
     <ion-content class="has-header">
       <ion-list>
-        <ion-item nav-clear menu-close href="#/app/search">
-          <span class="icon ion-search padding-right"></span>
-          <span>Search</span>
+        <ion-item nav-clear menu-close href="#/">
+          <span class="icon ion-ionic padding-right"></span>
+          <span>Home</span>
         </ion-item>
-        <ion-item nav-clear menu-close ng-click="openModal()">
-          <span class="icon ion-compose padding-right"></span>
-          <span>Add Custom Gif</span>
-        </ion-item>
-        <ion-item nav-clear menu-close href="#/app/favorites">
-          <span class="icon ion-android-star padding-right"></span>
-          <span>Favorites</span>
-        </ion-item>
-        <ion-item nav-clear menu-close href="#/app/settings">
+        <ion-item nav-clear menu-close href="#/upload">
+          <span class="icon ion-upload padding-right"></span>
+          <span>Upload File</span>
+          </ion-item>
+        <ion-item nav-clear menu-close href="#/settings">
           <span class="icon ion-gear-a padding-right"></span>
           <span>Settings</span>
         </ion-item>
-        <ion-item nav-clear menu-close ng-click="auth.$signOut()">
+        <ion-item nav-clear menu-close ng-click="signOut()">
           <span class="icon ion-log-out padding-right"></span>
           <span>Logout</span>
         </ion-item>
       </ion-list>
-    </ion-content>
-
-    <footer class="bar bar-footer bar-dark">
-      <div class="title">Andrew McOlash - {{year}}</div>
-    </footer>
-  </ion-side-menu>
-
-  <ion-side-menu side="right" width="450">
-    <header class="bar bar-header bar-dark">
-      <h1 class="title">Preview</h1>
-      <button menu-toggle="right" class="button button-icon icon ion-close"></button>
-    </header>
-    <ion-content class="has-header right-menu">
-      <div class="center-image">
-        <img ng-src="{{preview.url}}" >
-        <!-- <ion-spinner ng-show="!preview.isLoaded"></ion-spinner> -->
-      </div>
-
-      <div class="item item-input-inset">
-        <label class="item-input-wrapper">
-          <input type="text" value={{preview.url}} disabled>
-        </label>
-        <button class="button button-icon icon ion-clipboard" clipboard text="preview.url"></button>
-      </div>
     </ion-content>
   </ion-side-menu>
 </ion-side-menus>

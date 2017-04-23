@@ -1,0 +1,11 @@
+{
+  "hosting": {
+    "public": "www"
+  },
+  "database": {
+    "rules": "database.rules.json"
+  },
+  "storage": {
+    "rules": "storage.rules"
+  }
+}

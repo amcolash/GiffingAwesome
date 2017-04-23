@@ -1,178 +1,95 @@
-angular.module('starter.factories', [])
+angular.module('app.factories', [])
 
-.factory('previewData', function() {
-  return {
-    url: '',
-    isLoaded: false
-  };
-})
-
-.factory('Auth', ['$firebaseAuth', '$state', function($firebaseAuth, $state) {
-    // Init firebase 3.x.x
-    var config = {
-      apiKey: "AIzaSyDvGo3D5AhgdzcAbli3H3lXuawv-yeOoao",
-      authDomain: "giffingawesome.firebaseapp.com",
-      databaseURL: "https://giffingawesome.firebaseio.com",
-      storageBucket: "firebase-giffingawesome.appspot.com",
-    };
-    firebase.initializeApp(config);
-
-    var auth = $firebaseAuth();
-
-    // any time auth status updates, add the user data to scope
-    auth.$onAuthStateChanged(function(authData) {
-      auth.authData = authData;
-
-      if (authData === null || authData === undefined) {
-        $state.go('app.login');
-      } else {
-        $state.go('app.search');
+.factory('Credentials', ['keys', '$cordovaOauth', '$q', function(keys, $cordovaOauth, $q) {
+  return function(authMethod) {
+    var deferred = $q.defer();
+    // Redirect login method
+    if(ionic.Platform.isAndroid()) {
+      if(authMethod === "google") {
+        window.plugins.googleplus.login({
+          'webClientId': keys.googleId,
+    	    'offline': true
+        },
+        function (oauth) {
+          deferred.resolve(firebase.auth.GoogleAuthProvider.credential(oauth.idToken));
+        },
+        function (error) {
+          console.error('Error: ' + JSON.stringify(error));
+          deferred.error(error);
+        });
+      } else if (authMethod === "twitter") {
+        $cordovaOauth.twitter(keys.twitterId, keys.twitterSecret).then(function(oauth) {
+          deferred.resolve(firebase.auth.TwitterAuthProvider.credential(oauth.oauth_token, oauth.oauth_token_secret));
+        }, function(error) {
+          console.error("Error: " + JSON.stringify(error));
+          deferred.error(error);
+        });
       }
-    });
+    } else {
+      if (authMethod === "google") {
+        deferred.resolve(new firebase.auth.GoogleAuthProvider());
+      } else if (authMethod === "twitter") {
+        deferred.resolve(new firebase.auth.TwitterAuthProvider());
+      }
 
-    return auth;
+      // $scope.auth.$signInWithCredential(credential).then(function(authData) {
+      //   console.log("Signed in as: " + authData.uid);
+      // }).catch(function(error) {
+      //   console.error("Authentication failed: " + JSON.stringify(error));
+      // });
+      // Default popup on desktop
+      // console.log("attempting to log in with popup")
+      // $scope.auth.$signInWithPopup(authMethod).then(function(authData) {
+      //   console.log("Signed in as:", authData.uid);
+      // }).catch(function(error) {
+      //   console.log(JSON.stringify(error));
+      // });
+    }
+
+    return deferred.promise;
   }
-])
+}])
 
-.factory('Settings', ['$firebaseObject', 'Auth',
-  function($firebaseObject, Auth) {
-    var settings = null;
+.factory('Auth', ['$firebaseAuth', function($firebaseAuth) {
+  return $firebaseAuth();
+}])
 
-    Auth.$onAuthStateChanged(function(authData) {
-      if (authData !== null) {
-        var USER = authData.uid;
-        var ref = firebase.database().ref('users/' + USER + '/settings');
-        settings = $firebaseObject(ref);
-      }
-    });
+// The below factories have deferred promises because we need to wait for a uid first
+.factory('Settings', ['Auth', '$firebaseObject', '$q', function(Auth, $firebaseObject, $q) {
+  var deferred = $q.defer();
 
-    function getSettings() {
-      return settings;
+  Auth.$onAuthStateChanged(function(authData) {
+    if (authData && authData.uid) {
+      var ref = firebase.database().ref('users/' + authData.uid + '/settings');
+      var settings = $firebaseObject(ref);
+
+      // Need to wait while the object is loaded
+      settings.$loaded().then(function() {
+        deferred.resolve(settings);
+      });
     }
+  });
 
-    return getSettings;
-  }
-])
+  return deferred.promise;
+}])
 
-.factory('Favorites', ['$firebaseArray', 'Auth', 'Storage',
-  function($firebaseArray, Auth, Storage) {
-    var favorites = null;
-    var storage = Storage;
+.factory('Storage', ['Auth', '$firebaseArray', '$q', function(Auth, $firebaseArray, $q) {
+  var deferred = $q.defer();
 
-    Auth.$onAuthStateChanged(function(authData) {
-      if (authData !== null) {
-        var USER = authData.uid;
-        var ref = firebase.database().ref('users/' + USER + '/favorites');
-        favorites = $firebaseArray(ref);
-      }
-    });
+  Auth.$onAuthStateChanged(function(authData) {
+    if (authData && authData.uid) {
+      var fileRef = firebase.database().ref('users/' + authData.uid + '/files');
+      var fileList = $firebaseArray(fileRef);
 
-    function addFavorite(image) {
-      // Strip out stuff that isn't important
-      var customImage = {
-        imgUrl: image.imgUrl,
-        hqImgUrl: image.hqImgUrl,
-        originalImgUrl: image.originalImgUrl,
-        thumbnailUrl: image.thumbnailUrl,
-        hqThumbnailUrl: image.hqThumbnailUrl,
-        favorite: image.favorite,
-        tags: image.tags,
-        // Only used with custom uploaded files
-        filename: image.filename || null,
-        thumbnailName: image.thumbnailName || null,
-        hqThumbnailName: image.hqThumbnailName || null,
-      }
-      favorites.$add(customImage);
+      var storageRef = firebase.storage().ref();
+      var storage = storageRef.child('users/' + authData.uid + '/uploads');
+
+      deferred.resolve({
+        fileList: fileList,
+        storage: storage
+      });
     }
+  });
 
-    function removeFavorite(image) {
-      for (var i = 0; i < favorites.length; i++) {
-        if (favorites[i].originalImgUrl === image.originalImgUrl) {
-          if (favorites[i].filename !== undefined && favorites[i].filename !== null) {
-            storage().child(favorites[i].filename).delete();
-          }
-          if (favorites[i].thumbnailName !== undefined && favorites[i].thumbnailName !== null) {
-            storage().child(favorites[i].thumbnailName).delete();
-          }
-          if (favorites[i].hqThumbnailName !== undefined && favorites[i].hqThumbnailName !== null) {
-            storage().child(favorites[i].hqThumbnailName).delete();
-          }
-
-          favorites.$remove(i);
-          return;
-        }
-      }
-      console.error('unable to remove favorite');
-    }
-
-    function updateTags(value) {
-      var image = value.image;
-      var tag = value.tag;
-
-      for (var i = 0; i < favorites.length; i++) {
-        if (favorites[i].originalImgUrl === image.originalImgUrl) {
-          image.tags = image.tags || (tag ? [tag] : null);
-          favorites[i].tags = image.tags;
-          favorites.$save(i);
-        }
-      }
-    }
-
-    function getFavorites() {
-      if (favorites === null) {
-        return [];
-      }
-      return favorites;
-    }
-
-    function isFavorite(image) {
-      for (var i = 0; i < favorites.length; i++) {
-        if (favorites[i].originalImgUrl === image.originalImgUrl) {
-          return true;
-        }
-      }
-
-      return false;
-    }
-
-    function getTags(image) {
-      for (var i = 0; i < favorites.length; i++) {
-        if (favorites[i].originalImgUrl === image.originalImgUrl) {
-          return favorites[i].tags;
-        }
-      }
-
-      return [];
-    }
-
-    return {
-      addFavorite: addFavorite,
-      removeFavorite: removeFavorite,
-      updateTags: updateTags,
-      getFavorites: getFavorites,
-      isFavorite: isFavorite,
-      getTags: getTags,
-    };
-  }
-])
-
-.factory('Storage', ['Auth',
-  function(Auth) {
-    var storage = null;
-
-    Auth.$onAuthStateChanged(function(authData) {
-      if (authData !== null) {
-        var USER = authData.uid;
-
-        var storageRef = firebase.storage().ref();
-        storage = storageRef.child('users/' + USER + '/uploads');
-      }
-    });
-
-    function getStorage() {
-      return storage;
-    }
-
-    return getStorage;
-  }
-])
+  return deferred.promise;
+}])
