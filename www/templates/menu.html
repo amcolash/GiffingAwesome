@@ -13,13 +13,17 @@
     <ion-content class="has-header">
       <ion-list>
         <ion-item nav-clear menu-close href="#/">
-          <span class="icon ion-ionic padding-right"></span>
-          <span>Home</span>
+          <span class="icon ion-search padding-right"></span>
+          <span>Search</span>
         </ion-item>
         <ion-item nav-clear menu-close href="#/upload">
-          <span class="icon ion-upload padding-right"></span>
-          <span>Upload File</span>
-          </ion-item>
+          <span class="icon ion-compose padding-right"></span>
+          <span>Add Custom Gif</span>
+        </ion-item>
+        <ion-item nav-clear menu-close href="#/favorites">
+          <span class="icon ion-star padding-right"></span>
+          <span>Favorites</span>
+        </ion-item>
         <ion-item nav-clear menu-close href="#/settings">
           <span class="icon ion-gear-a padding-right"></span>
           <span>Settings</span>
@@ -30,5 +34,9 @@
         </ion-item>
       </ion-list>
     </ion-content>
+
+    <footer class="bar bar-footer bar-dark">
+      <div class="title">Andrew McOlash - {{year}}</div>
+    </footer>
   </ion-side-menu>
 </ion-side-menus>

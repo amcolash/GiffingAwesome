@@ -1,10 +1,18 @@
 angular.module('app.controllers', [])
 
-.controller('MenuController', ['$scope', 'Auth', 'Storage', function($scope, Auth, Storage) {
+.controller('MenuController', ['$scope', 'Auth', 'Settings', 'Storage', function($scope, Auth, Settings, Storage) {
+  $scope.year = new Date().getFullYear();
+
+  Settings.then(function(data) {
+    $scope.settings;
+  })
+
   Storage.then(function(data) {
     $scope.fileList = data.fileList;
     $scope.storage = data.storage;
   });
+
+  $scope.year = new Date().getFullYear();
 
   $scope.signOut = function() {
     if ($scope.settings) {
@@ -94,6 +102,8 @@ angular.module('app.controllers', [])
   }
 }])
 
+.controller('SearchController', ['$scope', function($scope) {
+}])
 
 // .controller('SearchController', ['$scope', '$http', 'previewData', 'Favorites', 'Settings',
 //   function($scope, $http, previewData, Favorites, Settings) {
@@ -281,7 +291,11 @@ angular.module('app.controllers', [])
 //     $scope.favorites.updateTags(image);
 //   };
 // }])
-//
+
+
+.controller('FavoritesController', ['$scope', function($scope) {
+}])
+
 // .controller('FavoritesController', ['$scope', 'previewData', 'Favorites',
 //   function($scope, previewData, Favorites) {
 //   $scope.preview = previewData;
@@ -601,6 +615,15 @@ angular.module('app.controllers', [])
     })
 
   }
+}])
+
+.controller('ErrorController', ['$interval', '$scope', '$state', function($interval, $scope, $state) {
+  $scope.check = $interval(function() {
+    if (navigator.onLine) {
+      $interval.cancel($scope.check);
+      $state.go('app.dashboard');
+    }
+  }, 3000);
 }])
 
 .controller('LoginController', ['$scope', 'Auth', 'Credentials', function($scope, Auth, Credentials) {

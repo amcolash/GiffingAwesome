@@ -8,8 +8,8 @@
         <ion-toggle ng-model="$parent.settings.nsfw" toggle-class="toggle-calm">Allow All (NSFW) Images</ion-toggle>
       </div>
       <div class="list list-inset">
-        <button class="button button-block icon-left ion-social-twitter button-calm" ng-click="$parent.twitterAuth ? unlink('twitter') : link('twitter')">{{$parent.twitterAuth ? "Disconnect" : "Connect"}} Twitter Account</button>
-        <button class="button button-block icon-left ion-social-google button-assertive" ng-click="$parent.googleAuth ? unlink('google') : link('google')">{{$parent.googleAuth ? "Disconnect" : "Connect"}} Google Account</button>
+        <button class="button button-block icon-left ion-social-twitter button-calm" ng-click="$parent.twitterAuth ? unlink('twitter') : link('twitter')" ng-disabled="!$parent.googleAuth && $parent.twitterAuth">{{$parent.twitterAuth ? "Disconnect" : "Connect"}} Twitter Account</button>
+        <button class="button button-block icon-left ion-social-google button-assertive" ng-click="$parent.googleAuth ? unlink('google') : link('google')" ng-disabled="$parent.googleAuth && !$parent.twitterAuth">{{$parent.googleAuth ? "Disconnect" : "Connect"}} Google Account</button>
       </div>
     </div>
   </ion-content>
