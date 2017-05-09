@@ -1,6 +1,14 @@
 /* Universal stuff */
-.center-text {
-  text-align: center;
+.center {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height: 100%;
+}
+
+.responsive-img {
+  max-height: 100%;
+  max-width: 100%;
 }
 
 /* Overwrite default ionic scroll bar behavior */

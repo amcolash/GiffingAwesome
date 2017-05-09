@@ -153,12 +153,11 @@ var ionicApp = angular.module('app', [
       }
     })
 
-
     .state('app.upload', {
       url: '/upload',
       views: {
         'menuContent': {
-          templateUrl: 'templates/upload.html',
+          templateUrl: 'templates/custom-gif.html',
           controller: 'UploadController'
         }
       }

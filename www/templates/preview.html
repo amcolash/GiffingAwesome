@@ -1,0 +1,22 @@
+<ion-modal-view name="previewContent">
+  <ion-header-bar class="bar bar-header bar-dark">
+    <h1 class="title">Preview</h1>
+    <button class="button button-icon icon ion-close" ng-click="modal.hide()"></button>
+  </ion-header-bar>
+  <ion-content>
+    <div class="center">
+      <div>
+        <a href="{{url}}">
+          <img class="responsive-img padding-bottom" ng-src="{{url}}" alt="Preview"/>
+        </a>
+
+        <div class="item item-input-inset">
+          <label class="item-input-wrapper">
+            <input id="url" type="text" value="{{url}}" onClick="this.setSelectionRange(0, this.value.length);" readonly/>
+          </label>
+          <button class="button button-icon icon ion-clipboard" clipboard text="url"></button>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+</ion-modal-view>

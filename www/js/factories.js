@@ -31,19 +31,6 @@ angular.module('app.factories', [])
       } else if (authMethod === "twitter") {
         deferred.resolve(new firebase.auth.TwitterAuthProvider());
       }
-
-      // $scope.auth.$signInWithCredential(credential).then(function(authData) {
-      //   console.log("Signed in as: " + authData.uid);
-      // }).catch(function(error) {
-      //   console.error("Authentication failed: " + JSON.stringify(error));
-      // });
-      // Default popup on desktop
-      // console.log("attempting to log in with popup")
-      // $scope.auth.$signInWithPopup(authMethod).then(function(authData) {
-      //   console.log("Signed in as:", authData.uid);
-      // }).catch(function(error) {
-      //   console.log(JSON.stringify(error));
-      // });
     }
 
     return deferred.promise;
@@ -73,6 +60,117 @@ angular.module('app.factories', [])
   return deferred.promise;
 }])
 
+.factory('Favorites', ['$firebaseArray', '$q', 'Auth', 'Storage', function($firebaseArray, $q, Auth, Storage) {
+  var deferred = $q.defer();
+  var favorites = null;
+
+  Storage.then(function(data) {
+    storage = data;
+  })
+
+  Auth.$onAuthStateChanged(function(authData) {
+    if (authData && authData.uid) {
+      var ref = firebase.database().ref('users/' + authData.uid + '/favorites');
+      favorites = $firebaseArray(ref);
+
+      // Need to wait while the object is loaded
+      favorites.$loaded().then(function() {
+        deferred.resolve({
+          addFavorite: addFavorite,
+          removeFavorite: removeFavorite,
+          updateTags: updateTags,
+          getFavorites: getFavorites,
+          isFavorite: isFavorite,
+          getTags: getTags,
+        });
+      });
+    }
+  });
+
+  function addFavorite(image) {
+    // Strip out stuff that isn't important
+    var customImage = {
+      imgUrl: image.imgUrl,
+      hqImgUrl: image.hqImgUrl,
+      originalImgUrl: image.originalImgUrl,
+      thumbnailUrl: image.thumbnailUrl,
+      hqThumbnailUrl: image.hqThumbnailUrl,
+      favorite: image.favorite,
+      tags: image.tags,
+      // Only used with custom uploaded files
+      filename: image.filename || null,
+      thumbnailName: image.thumbnailName || null,
+      hqThumbnailName: image.hqThumbnailName || null,
+    }
+    favorites.$add(customImage).then(function(data) {
+      console.log(data)
+    }, function(error) {
+      console.error(error)
+    });
+  }
+
+  function removeFavorite(image) {
+    for (var i = 0; i < favorites.length; i++) {
+      if (favorites[i].originalImgUrl === image.originalImgUrl) {
+        if (favorites[i].filename !== undefined && favorites[i].filename !== null) {
+          storage.storage.child(favorites[i].filename).delete();
+        }
+        if (favorites[i].thumbnailName !== undefined && favorites[i].thumbnailName !== null) {
+          storage.storage.child(favorites[i].thumbnailName).delete();
+        }
+        if (favorites[i].hqThumbnailName !== undefined && favorites[i].hqThumbnailName !== null) {
+          storage.storage.child(favorites[i].hqThumbnailName).delete();
+        }
+
+        favorites.$remove(i);
+        return;
+      }
+    }
+
+    console.error('unable to remove favorite');
+  }
+
+  function updateTags(value) {
+    var image = value.image;
+    var tag = value.tag;
+
+    for (var i = 0; i < favorites.length; i++) {
+      if (favorites[i].originalImgUrl === image.originalImgUrl) {
+        image.tags = image.tags || (tag ? [tag] : null);
+        favorites[i].tags = image.tags;
+        favorites.$save(i);
+      }
+    }
+  }
+
+  function getFavorites() {
+    if (favorites === null) {
+      return [];
+    }
+    return favorites;
+  }
+
+  function isFavorite(image) {
+    for (var i = 0; i < favorites.length; i++) {
+      if (favorites[i].originalImgUrl === image.originalImgUrl) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function getTags(image) {
+    for (var i = 0; i < favorites.length; i++) {
+      if (favorites[i].originalImgUrl === image.originalImgUrl) {
+        return favorites[i].tags;
+      }
+    }
+    return [];
+  }
+
+  return deferred.promise;
+}])
+
 .factory('Storage', ['Auth', '$firebaseArray', '$q', function(Auth, $firebaseArray, $q) {
   var deferred = $q.defer();
 
@@ -89,6 +187,19 @@ angular.module('app.factories', [])
         storage: storage
       });
     }
+  });
+
+  return deferred.promise;
+}])
+
+.factory('Preview', ['$ionicModal', '$q', function($ionicModal, $q) {
+  var deferred = $q.defer();
+
+  $ionicModal.fromTemplateUrl('templates/preview.html', {
+    // scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    deferred.resolve(modal);
   });
 
   return deferred.promise;
