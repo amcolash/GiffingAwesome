@@ -1,26 +1,13 @@
 angular.module('app.controllers', [])
 
-.controller('MenuController', ['$scope', '$ionicModal', 'Auth', 'Preview', 'Settings', 'Storage', function($scope, $ionicModal, Auth, Preview,  Settings, Storage) {
+.controller('MenuController', ['$scope', '$ionicModal', 'Auth', 'Preview', 'Settings', function($scope, $ionicModal, Auth, Preview,  Settings) {
   $scope.year = new Date().getFullYear();
 
   Preview.then(function(data) {
     $scope.Preview = data;
   });
 
-  Storage.then(function(data) {
-    $scope.fileList = data.fileList;
-    $scope.storage = data.storage;
-  });
-
   $scope.signOut = function() {
-    if ($scope.settings) {
-      $scope.settings.$destroy();
-    }
-
-    if ($scope.fileList) {
-      $scope.fileList.$destroy();
-    }
-
     Auth.$signOut();
   };
 
@@ -29,78 +16,142 @@ angular.module('app.controllers', [])
   });
 }])
 
-.controller('UploadController', ['$scope', '$timeout', 'Storage', function($scope, $timeout, Storage) {
-  Storage.then(function(data) {
-    $scope.fileList = data.fileList;
-    $scope.storage = data.storage;
-
-    console.log($scope.fileList)
+.controller('UploadController', ['$scope', '$state', '$timeout', 'Favorites', 'Storage', function($scope, $state, $timeout, Favorites, Storage) {
+  Favorites.then(function(data) {
+    $scope.Favorites = data;
   });
 
-  $scope.uploadProgress = 0;
-  $scope.showSuccess = false;
-  $scope.showError = false;
+  Storage.then(function(data) {
+    $scope.FileList = data.fileList;
+    $scope.Storage = data.storage;
+  });
 
-  $scope.uploadFile = function() {
-    if ($scope.files !== undefined) {
-      // Make the progress bar show up at the beginning of the upload
-      $scope.uploadProgress = 5;
+  // $scope.uploadProgress = 0;
+  // $scope.showSuccess = false;
+  // $scope.showError = false;
+  $scope.customType = "link";
+  $scope.customGif = { imgUrl: '', tags: [], failed: false};
 
-      var file = $scope.files[0];
-      var originalName = file.name;
-      var name = new Date().getTime().toString() + '.' + file.name.split('.').pop();
-      var uploadTask = $scope.storage.child(name).put(file);
-
-      uploadTask.on('state_changed', function(snapshot) {
-        // Observe state change events such as progress, pause, and resume
-        $scope.uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        $scope.$apply();
-      }, function(error) {
-        // Handle unsuccessful uploads
-        $scope.showError = true;
-        console.error(error);
-      }, function() {
-        // Handle successful uploads
-        var dateObj = new Date();
-
-        var file = {
-          date: dateObj.toDateString(),
-          time: dateObj.toTimeString(),
-          name: name,
-          original: originalName,
-          url: uploadTask.snapshot.downloadURL,
+  $scope.addCustomGif = function() {
+      if ($scope.customType === 'link') {
+        if ($scope.customGif.imgUrl !== "") {
+          var image = {
+            imgUrl: $scope.customGif.imgUrl,
+            hqImgUrl: $scope.customGif.imgUrl,
+            originalImgUrl: $scope.customGif.imgUrl,
+            favorite: true,
+            tags: $scope.customGif.tags
+          }
+          $scope.Favorites.addFavorite(image);
+          $state.go('app.favorites');
+        } else {
+          console.error("No url given!");
         }
+      } else {
+        if ($scope.files !== undefined) {
+          $scope.uploadCustomGif();
+        } else {
+          console.error("No file selected to upload!");
+        }
+      }
+    };
 
-        console.log("upload complete");
+  //   $scope.uploadCustomGif = function() {
+  //     var file = $scope.files[0];
+  //     var name = new Date().getTime().toString() + '.' + file.name.split('.').pop();
+  //     var uploadTask = $scope.storage().child(name).put(file);
+  //
+  //     uploadTask.on('state_changed', function(snapshot) {
+  //       // Observe state change events such as progress, pause, and resume
+  //       $scope.uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+  //       $scope.$apply();
+  //     }, function(error) {
+  //       // Handle unsuccessful uploads
+  //     }, function() {
+  //       // Handle successful uploads
+  //       var downloadURL = uploadTask.snapshot.downloadURL;
+  //       // Remove token from the url
+  //       downloadURL = downloadURL.substring(0, downloadURL.indexOf('&token'));
+  //
+  //       // TODO: Save url without auth, maybe it expires?
+  //       var image = {
+  //         imgUrl: downloadURL,
+  //         hqImgUrl: downloadURL,
+  //         originalImgUrl: downloadURL,
+  //         filename: name,
+  //         favorite: true,
+  //         tags: $scope.customGif.tags
+  //       }
+  //
+  //       $scope.Favorites.addFavorite(image);
+  //       $scope.files = [];
+  //
+  //       $scope.uploadProgress = 0;
+  //       $scope.modal.hide();
+  //     });
+  //   }
 
-        $scope.fileList.$add(file);
-        $scope.showSuccess = true;
-      })
 
-      uploadTask.then(function() {
-        $scope.uploadProgress = 0;
-
-        $timeout(function() {
-          $scope.showSuccess = false;
-          $scope.showError = false;
-        }, 3500);
-      })
-
-
-    } else {
-      console.error("No file selected to upload!");
-    }
-  }
-
-  $scope.removeFile = function(file) {
-    var name = file.name;
-    var uploadTask = $scope.storage.child(name).delete().then(function() {
-      console.log("successfully removed file");
-      $scope.fileList.$remove(file);
-    }).catch(function(error) {
-      console.error(error);
-    });
-  }
+  // $scope.uploadFile = function() {
+  //   if ($scope.files !== undefined) {
+  //     // Make the progress bar show up at the beginning of the upload
+  //     $scope.uploadProgress = 5;
+  //
+  //     var file = $scope.files[0];
+  //     var originalName = file.name;
+  //     var name = new Date().getTime().toString() + '.' + file.name.split('.').pop();
+  //     var uploadTask = $scope.storage.child(name).put(file);
+  //
+  //     uploadTask.on('state_changed', function(snapshot) {
+  //       // Observe state change events such as progress, pause, and resume
+  //       $scope.uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+  //       $scope.$apply();
+  //     }, function(error) {
+  //       // Handle unsuccessful uploads
+  //       $scope.showError = true;
+  //       console.error(error);
+  //     }, function() {
+  //       // Handle successful uploads
+  //       var dateObj = new Date();
+  //
+  //       var file = {
+  //         date: dateObj.toDateString(),
+  //         time: dateObj.toTimeString(),
+  //         name: name,
+  //         original: originalName,
+  //         url: uploadTask.snapshot.downloadURL,
+  //       }
+  //
+  //       console.log("upload complete");
+  //
+  //       $scope.fileList.$add(file);
+  //       $scope.showSuccess = true;
+  //     })
+  //
+  //     uploadTask.then(function() {
+  //       $scope.uploadProgress = 0;
+  //
+  //       $timeout(function() {
+  //         $scope.showSuccess = false;
+  //         $scope.showError = false;
+  //       }, 3500);
+  //     })
+  //
+  //
+  //   } else {
+  //     console.error("No file selected to upload!");
+  //   }
+  // }
+  //
+  // $scope.removeFile = function(file) {
+  //   var name = file.name;
+  //   var uploadTask = $scope.storage.child(name).delete().then(function() {
+  //     console.log("successfully removed file");
+  //     $scope.fileList.$remove(file);
+  //   }).catch(function(error) {
+  //     console.error(error);
+  //   });
+  // }
 }])
 
 .controller('SearchController', ['$scope', '$http', 'Favorites', 'Preview', 'Settings',
@@ -297,15 +348,26 @@ angular.module('app.controllers', [])
   };
 }])
 
-.controller('FavoritesController', ['$scope', 'Favorites', 'Preview',
-  function($scope, Favorites, Preview) {
+.controller('FavoritesController', ['$q', '$scope', 'Favorites', 'Preview', 'Storage',
+  function($q, $scope, Favorites, Preview, Storage) {
 
-  Favorites.then(function(data) {
+  var favoritesResolve = Favorites.then(function(data) {
     $scope.Favorites = data;
+  });
+
+    // Storage resolve after favorites
+  var storageResolve = Storage.then(function(data) {
+    $scope.FileList = data.fileList;
+    $scope.Storage = data.storage;
   });
 
   Preview.then(function(data) {
     $scope.Preview = data;
+  });
+
+  // Wait for both favorites and storage to resolve before trying to generate thumbnails
+  $q.all([favoritesResolve, storageResolve]).then(function() {
+    $scope.generateMissingThumbnails();
   });
 
   $scope.mobile = false;
@@ -317,50 +379,52 @@ angular.module('app.controllers', [])
   $scope.$on('$ionicView.enter', function() {
     $scope.mobile = (ionic.Platform.isAndroid() || ionic.Platform.isIOS() || ionic.Platform.isWindowsPhone()) && !ionic.Platform.is('tablet');
     $scope.animate = !$scope.mobile;
-
-    // var numGen = 0;
-    //
-    //  Generate missing thumbnails. For now, custom gifs will need to be generated from here (also includes old images that do not contain the thumbnail code that was added)
-    // for (var i = 0; i < $scope.Favorites.getFavorites().length; i++) {
-    //   var image = $scope.Favorites.getFavorites()[i];
-    //
-    //   // Generate normal thumbnail if missing
-    //   if (!image.thumbnailUrl || $scope.regen) {
-    //     numGen++;
-    //     console.log("generating normal thumbnail for: " + JSON.stringify(image));
-    //     if (image.thumbnailUrl && image.thumbnailName) {
-    //       // If there is an existing thumbnail, delete it
-    //       $scope.storage().child(image.thumbnailName).delete().then(function() {
-    //         // Deleted successfully
-    //       }).catch(function(error) {
-    //         // Something went wrong or the file does not exist
-    //       });
-    //     }
-    //
-    //     $scope.generateThumbnail(image, false);
-    //   }
-    //
-    //   // Generate hq thumbnail if missing
-    //   if (!image.hqThumbnailUrl || $scope.regen) {
-    //     numGen++;
-    //     console.log("generating hq thumbnail for: " + JSON.stringify(image));
-    //     if (image.hqThumbnailUrl && image.hqThumbnailName) {
-    //       // If there is an existing thumbnail, delete it
-    //       $scope.storage().child(image.hqThumbnailName).delete().then(function() {
-    //         // Deleted successfully
-    //       }).catch(function(error) {
-    //         // Something went wrong or the file does not exist
-    //       });
-    //     }
-    //
-    //     $scope.generateThumbnail(image, true);
-    //   }
-    // }
-    //
-    // if (numGen > 0) {
-    //   console.log("total gen: " + numGen);
-    // }
   });
+
+  //  Generate missing thumbnails. For now, custom gifs will need to be generated from here (also includes old images that do not contain the thumbnail code that was added)
+  $scope.generateMissingThumbnails = function() {
+
+    var numGen = 0;
+    for (var i = 0; i < $scope.Favorites.getFavorites().length; i++) {
+      var image = $scope.Favorites.getFavorites()[i];
+
+      // Generate normal thumbnail if missing
+      if (!image.thumbnailUrl || $scope.regen) {
+        numGen++;
+        console.log("generating normal thumbnail for: " + JSON.stringify(image));
+        if (image.thumbnailUrl && image.thumbnailName) {
+          // If there is an existing thumbnail, delete it
+          $scope.Storage.child(image.thumbnailName).delete().then(function() {
+            // Deleted successfully
+          }).catch(function(error) {
+            console.error(error);
+          });
+        }
+
+        $scope.generateThumbnail(image, false);
+      }
+
+      // Generate hq thumbnail if missing
+      if (!image.hqThumbnailUrl || $scope.regen) {
+        numGen++;
+        console.log("generating hq thumbnail for: " + JSON.stringify(image));
+        if (image.hqThumbnailUrl && image.hqThumbnailName) {
+          // If there is an existing thumbnail, delete it
+          $scope.Storage.child(image.hqThumbnailName).delete().then(function() {
+            // Deleted successfully
+          }).catch(function(error) {
+            console.error(error);
+          });
+        }
+
+        $scope.generateThumbnail(image, true);
+      }
+    }
+
+    if (numGen > 0) {
+      console.log("total gen: " + numGen);
+    }
+  }
 
   $scope.generateThumbnail = function(image, hq) {
     var myCan = document.createElement('canvas');
@@ -395,7 +459,7 @@ angular.module('app.controllers', [])
   }
 
   $scope.uploadThumbnail = function(image, file, hq) {
-    var uploadTask = $scope.storage().child(file.name).put(file);
+    var uploadTask = $scope.Storage.child(file.name).put(file);
 
     uploadTask.on('state_changed', function(snapshot) {
       // Uploading

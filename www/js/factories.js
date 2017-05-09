@@ -93,8 +93,8 @@ angular.module('app.factories', [])
       imgUrl: image.imgUrl,
       hqImgUrl: image.hqImgUrl,
       originalImgUrl: image.originalImgUrl,
-      thumbnailUrl: image.thumbnailUrl,
-      hqThumbnailUrl: image.hqThumbnailUrl,
+      thumbnailUrl: image.thumbnailUrl || null,
+      hqThumbnailUrl: image.hqThumbnailUrl || null,
       favorite: image.favorite,
       tags: image.tags,
       // Only used with custom uploaded files
@@ -103,7 +103,7 @@ angular.module('app.factories', [])
       hqThumbnailName: image.hqThumbnailName || null,
     }
     favorites.$add(customImage).then(function(data) {
-      console.log(data)
+      console.log("Adding Favorite: " + JSON.stringify(data));
     }, function(error) {
       console.error(error)
     });
