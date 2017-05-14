@@ -5,8 +5,9 @@
 
   <ion-content class="has-header padding">
 
-      <div class="center-image" ng-show="!$parent.customGif.failed && $parent.customGif.imgUrl.length > 0">
-        <img ng-src="{{$parent.customGif.imgUrl}}" alt="Custom Gif" customonload>
+      <div class="center-image" ng-show="!$parent.customGif.failed && ($parent.customGif.imgUrl.length > 0 || $parent.customGif.imgData.length > 0)">
+        <img ng-show="!$parent.customGif.failed && $parent.customGif.imgUrl.length > 0" ng-src="{{$parent.customGif.imgUrl}}" alt="Custom Gif" imageonerror>
+        <img ng-show="!$parent.customGif.failed && $parent.customGif.imgData.length > 0" data-ng-src="{{$parent.customGif.imgData}}" alt="Custom Gif" imageonerror>
       </div>
 
       <div class="row">
@@ -18,11 +19,10 @@
         </div>
       </div>
 
-      <!-- Yuck, parent of parent of parent. Not sure why there are so many scopes! -->
       <label ng-show="$parent.customType === 'upload'" class="button button-full button-dark file-upload">
         <i class="icon ion-upload placeholder-icon"></i>
-        {{$parent.$parent.$parent.files ? $parent.$parent.$parent.files[0].name : "Choose File"}}
-        <input type="file" class="file-input" file-input="$parent.$parent.$parent.files"/>
+        {{$parent.files ? $parent.files.name : "Choose File"}}
+        <input type="file" class="file-input" file-model="$parent.files"/>
       </label>
 
       <label ng-show="$parent.customType === 'link'" class="item item-input">
@@ -35,7 +35,7 @@
         <tags-input ng-model="$parent.customGif.tags"></tags-input>
       </label>
 
-      <button class="button button-full button-dark" ng-click="addCustomGif()">Add</button>
+      <button class="button button-full button-dark" ng-click="addCustomGif()" ng-disabled="$parent.uploadProgress > 0">Add</button>
 
       <div class="padding center-image" ng-show="$parent.uploadProgress > 0 && $parent.uploadProgress < 100">
         <ion-spinner ></ion-spinner>

@@ -103,7 +103,7 @@ angular.module('app.factories', [])
       hqThumbnailName: image.hqThumbnailName || null,
     }
     favorites.$add(customImage).then(function(data) {
-      console.log("Adding Favorite: " + JSON.stringify(data));
+      console.log(data);
     }, function(error) {
       console.error(error)
     });

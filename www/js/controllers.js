@@ -26,70 +26,97 @@ angular.module('app.controllers', [])
     $scope.Storage = data.storage;
   });
 
+  $scope.fileChanged = function(data) {
+    $scope.files = data;
+    $scope.$apply();
+  };
+
   // $scope.uploadProgress = 0;
   // $scope.showSuccess = false;
   // $scope.showError = false;
   $scope.customType = "link";
-  $scope.customGif = { imgUrl: '', tags: [], failed: false};
+  $scope.customGif = { imgUrl: '', imgData: '', tags: [], failed: false};
 
   $scope.addCustomGif = function() {
-      if ($scope.customType === 'link') {
-        if ($scope.customGif.imgUrl !== "") {
-          var image = {
-            imgUrl: $scope.customGif.imgUrl,
-            hqImgUrl: $scope.customGif.imgUrl,
-            originalImgUrl: $scope.customGif.imgUrl,
-            favorite: true,
-            tags: $scope.customGif.tags
-          }
-          $scope.Favorites.addFavorite(image);
-          $state.go('app.favorites');
-        } else {
-          console.error("No url given!");
+    if ($scope.customType === 'link') {
+      if ($scope.customGif.imgUrl !== "") {
+        var image = {
+          imgUrl: $scope.customGif.imgUrl,
+          hqImgUrl: $scope.customGif.imgUrl,
+          originalImgUrl: $scope.customGif.imgUrl,
+          favorite: true,
+          tags: $scope.customGif.tags
         }
+        $scope.Favorites.addFavorite(image);
+        $state.go('app.favorites');
       } else {
-        if ($scope.files !== undefined) {
-          $scope.uploadCustomGif();
-        } else {
-          console.error("No file selected to upload!");
-        }
+        console.error("No url given!");
       }
-    };
+    } else {
+      if ($scope.files !== undefined) {
+        $scope.uploadCustomGif();
+      } else {
+        console.error("No file selected to upload!");
+      }
+    }
+  };
 
-  //   $scope.uploadCustomGif = function() {
-  //     var file = $scope.files[0];
-  //     var name = new Date().getTime().toString() + '.' + file.name.split('.').pop();
-  //     var uploadTask = $scope.storage().child(name).put(file);
-  //
-  //     uploadTask.on('state_changed', function(snapshot) {
-  //       // Observe state change events such as progress, pause, and resume
-  //       $scope.uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-  //       $scope.$apply();
-  //     }, function(error) {
-  //       // Handle unsuccessful uploads
-  //     }, function() {
-  //       // Handle successful uploads
-  //       var downloadURL = uploadTask.snapshot.downloadURL;
-  //       // Remove token from the url
-  //       downloadURL = downloadURL.substring(0, downloadURL.indexOf('&token'));
-  //
-  //       // TODO: Save url without auth, maybe it expires?
-  //       var image = {
-  //         imgUrl: downloadURL,
-  //         hqImgUrl: downloadURL,
-  //         originalImgUrl: downloadURL,
-  //         filename: name,
-  //         favorite: true,
-  //         tags: $scope.customGif.tags
-  //       }
-  //
-  //       $scope.Favorites.addFavorite(image);
-  //       $scope.files = [];
-  //
-  //       $scope.uploadProgress = 0;
-  //       $scope.modal.hide();
-  //     });
-  //   }
+  $scope.$watch('files', function(oldValue, newValue) {
+    if ($scope.files) {
+      var file = $scope.files;
+
+      if (file.name) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          $scope.customGif.imgData = e.target.result;
+          $scope.$apply();
+        }
+
+        reader.readAsDataURL(file);
+      }
+    }
+  });
+
+  $scope.uploadCustomGif = function() {
+    if ($scope.files) {
+      var file = $scope.files;
+      var name = new Date().getTime().toString() + '.' + file.name.split('.').pop();
+      var uploadTask = $scope.Storage.child(name).put(file);
+
+      uploadTask.on('state_changed', function(snapshot) {
+        // Observe state change events such as progress, pause, and resume
+        $scope.uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        $scope.$apply();
+      }, function(error) {
+        // Handle unsuccessful uploads
+      }, function() {
+        // Handle successful uploads
+        var downloadURL = uploadTask.snapshot.downloadURL;
+        // Remove token from the url
+        downloadURL = downloadURL.substring(0, downloadURL.indexOf('&token'));
+
+        var image = {
+          imgUrl: downloadURL,
+          hqImgUrl: downloadURL,
+          originalImgUrl: downloadURL,
+          filename: name,
+          favorite: true,
+          tags: $scope.customGif.tags
+        }
+
+        $scope.Favorites.addFavorite(image);
+
+        // Clear preview, before changing files so that the apply works correctly
+        $scope.customGif.imgData = null;
+        $scope.uploadProgress = 0;
+        $scope.$apply();
+
+        $scope.files = undefined;
+
+        // $scope.modal.hide();
+      });
+    }
+  };
 
 
   // $scope.uploadFile = function() {
@@ -394,6 +421,7 @@ angular.module('app.controllers', [])
         console.log("generating normal thumbnail for: " + JSON.stringify(image));
         if (image.thumbnailUrl && image.thumbnailName) {
           // If there is an existing thumbnail, delete it
+          console.log("deleted old thumbnail for: " + image);
           $scope.Storage.child(image.thumbnailName).delete().then(function() {
             // Deleted successfully
           }).catch(function(error) {
@@ -410,6 +438,7 @@ angular.module('app.controllers', [])
         console.log("generating hq thumbnail for: " + JSON.stringify(image));
         if (image.hqThumbnailUrl && image.hqThumbnailName) {
           // If there is an existing thumbnail, delete it
+          console.log("deleted old thumbnail for: " + image);
           $scope.Storage.child(image.hqThumbnailName).delete().then(function() {
             // Deleted successfully
           }).catch(function(error) {
@@ -429,10 +458,13 @@ angular.module('app.controllers', [])
   $scope.generateThumbnail = function(image, hq) {
     var myCan = document.createElement('canvas');
     var img = new Image();
-    img.setAttribute('crossOrigin', 'anonymous');
+    img.setAttribute('crossOrigin', 'Anonymous');
     img.src = hq ? image.hqImgUrl : image.imgUrl;
-    img.onload = function () {
 
+    console.log(img)
+
+    img.onload = function () {
+      console.log("onload")
       var size = hq ? 400 : 200;
       if (img.height > img.width) {
         myCan.height = size;
@@ -459,12 +491,15 @@ angular.module('app.controllers', [])
   }
 
   $scope.uploadThumbnail = function(image, file, hq) {
+    console.log("let's upload")
+
     var uploadTask = $scope.Storage.child(file.name).put(file);
 
     uploadTask.on('state_changed', function(snapshot) {
       // Uploading
     }, function(error) {
       // Handle unsuccessful uploads
+      console.error(error);
     }, function() {
       // Handle successful uploads
       var downloadURL = uploadTask.snapshot.downloadURL;
