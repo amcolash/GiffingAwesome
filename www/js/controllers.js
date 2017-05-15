@@ -91,6 +91,7 @@ angular.module('app.controllers', [])
         // Handle unsuccessful uploads
       }, function() {
         // Handle successful uploads
+        console.log(uploadTask.snapshot);
         var downloadURL = uploadTask.snapshot.downloadURL;
         // Remove token from the url
         downloadURL = downloadURL.substring(0, downloadURL.indexOf('&token'));
@@ -101,7 +102,7 @@ angular.module('app.controllers', [])
           originalImgUrl: downloadURL,
           filename: name,
           favorite: true,
-          tags: $scope.customGif.tags
+          tags: $scope.customGif.tags || []
         }
 
         $scope.Favorites.addFavorite(image);

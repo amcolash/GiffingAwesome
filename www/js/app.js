@@ -161,8 +161,7 @@ var ionicApp = angular.module('app', [
           templateUrl: 'templates/custom-gif.html',
           controller: 'UploadController'
         }
-      },
-      cache: false // Do not cache to clear out old data from upload
+      }
     })
 
     .state('app.settings', {
