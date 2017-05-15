@@ -94,7 +94,7 @@ angular.module('app.controllers', [])
         console.log(uploadTask.snapshot);
         var downloadURL = uploadTask.snapshot.downloadURL;
         // Remove token from the url
-        downloadURL = downloadURL.substring(0, downloadURL.indexOf('&token'));
+        // downloadURL = downloadURL.substring(0, downloadURL.indexOf('&token'));
 
         var image = {
           imgUrl: downloadURL,
@@ -459,17 +459,15 @@ angular.module('app.controllers', [])
   $scope.generateThumbnail = function(image, hq) {
     var myCan = document.createElement('canvas');
     var img = new Image();
-    img.setAttribute('crossOrigin', 'Anonymous');
+    img.crossOrigin = 'Anonymous';
     img.src = hq ? image.hqImgUrl : image.imgUrl;
 
-    console.log(img)
-
     img.onload = function () {
-      console.log("onload")
       var size = hq ? 400 : 200;
+
       if (img.height > img.width) {
         myCan.height = size;
-        myCan.width = Number((img.height / img.width) * size);
+        myCan.width = Number((img.width / img.height) * size);
       } else {
         myCan.height = Number((img.height / img.width) * size);
         myCan.width = size;
@@ -492,8 +490,6 @@ angular.module('app.controllers', [])
   }
 
   $scope.uploadThumbnail = function(image, file, hq) {
-    console.log("let's upload")
-
     var uploadTask = $scope.Storage.child(file.name).put(file);
 
     uploadTask.on('state_changed', function(snapshot) {
@@ -505,7 +501,7 @@ angular.module('app.controllers', [])
       // Handle successful uploads
       var downloadURL = uploadTask.snapshot.downloadURL;
       // Remove token from the url
-      downloadURL = downloadURL.substring(0, downloadURL.indexOf('&token'));
+      // downloadURL = downloadURL.substring(0, downloadURL.indexOf('&token'));
 
       if (hq) {
         image.hqThumbnailUrl = downloadURL;

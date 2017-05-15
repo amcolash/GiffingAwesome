@@ -22,7 +22,7 @@
       <label ng-show="$parent.customType === 'upload'" class="button button-full button-dark file-upload">
         <i class="icon ion-upload placeholder-icon"></i>
         {{$parent.files ? $parent.files.name : "Choose File"}}
-        <input type="file" class="file-input" file-model="$parent.files"/>
+        <input type="file" class="file-input" file-model="$parent.files" ng-disabled="$parent.uploadProgress > 0"/>
       </label>
 
       <label ng-show="$parent.customType === 'link'" class="item item-input">

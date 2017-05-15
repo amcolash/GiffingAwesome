@@ -63,8 +63,9 @@ angular.module('app.factories', [])
 .factory('Favorites', ['$firebaseArray', '$q', 'Auth', 'Storage', function($firebaseArray, $q, Auth, Storage) {
   var deferred = $q.defer();
   var favorites = null;
+  var storage = null;
 
-  Storage.then(function(data) {
+  var storageResolve = Storage.then(function(data) {
     storage = data;
   })
 
@@ -73,8 +74,10 @@ angular.module('app.factories', [])
       var ref = firebase.database().ref('users/' + authData.uid + '/favorites');
       favorites = $firebaseArray(ref);
 
-      // Need to wait while the object is loaded
-      favorites.$loaded().then(function() {
+      var favoritesResolve = favorites.$loaded();
+
+      // Need to wait for storage and array resolve
+      $q.all([favoritesResolve, storageResolve]).then(function() {
         deferred.resolve({
           addFavorite: addFavorite,
           removeFavorite: removeFavorite,
