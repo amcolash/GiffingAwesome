@@ -11,6 +11,16 @@
         <button class="button button-block icon-left ion-social-twitter button-calm" ng-click="$parent.twitterAuth ? unlink('twitter') : link('twitter')" ng-disabled="!$parent.googleAuth && $parent.twitterAuth">{{$parent.twitterAuth ? "Disconnect" : "Connect"}} Twitter Account</button>
         <button class="button button-block icon-left ion-social-google button-assertive" ng-click="$parent.googleAuth ? unlink('google') : link('google')" ng-disabled="$parent.googleAuth && !$parent.twitterAuth">{{$parent.googleAuth ? "Disconnect" : "Connect"}} Google Account</button>
       </div>
+      <div class="list list-inset">
+        <p>
+          <h3>About</h3>
+          <span>Made with love for all of the gif sharers out there!</span><br>
+          <span>&copy; Andrew McOlash 2016 - {{year}}</span><br><br>
+          <span><a href="http://amcolash.com">My Website</a></span><br>
+          <span><a href="https://github.com/amcolash/GiffingAwesome">Source Code</a></span><br>
+          <span><a href="privacy_policy.html">Privacy Policy</a></span>
+        </p>
+      </div>
     </div>
   </ion-content>
 </ion-view>
