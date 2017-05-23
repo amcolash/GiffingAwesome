@@ -7,22 +7,22 @@ angular.module('app.factories', [])
     if(ionic.Platform.isAndroid()) {
       if(authMethod === "google") {
         window.plugins.googleplus.login({
+    	  'offline': true,
           'webClientId': keys.googleId,
-    	    'offline': true
         },
         function (oauth) {
           deferred.resolve(firebase.auth.GoogleAuthProvider.credential(oauth.idToken));
         },
         function (error) {
           console.error('Error: ' + JSON.stringify(error));
-          deferred.error(error);
+          deferred.reject(error);
         });
       } else if (authMethod === "twitter") {
         $cordovaOauth.twitter(keys.twitterId, keys.twitterSecret).then(function(oauth) {
           deferred.resolve(firebase.auth.TwitterAuthProvider.credential(oauth.oauth_token, oauth.oauth_token_secret));
         }, function(error) {
           console.error("Error: " + JSON.stringify(error));
-          deferred.error(error);
+          deferred.reject(error);
         });
       }
     } else {

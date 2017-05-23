@@ -16,6 +16,18 @@ var ionicApp = angular.module('app', [
   'ngCordovaOauth'
 ])
 
+.run(['keys', function(keys) {
+  if (keys.googleId.length == 0) {
+    console.error("Missing googleId for Oauth");
+  }
+  if (keys.twitterId.length == 0) {
+    console.error("Missing twitterId for Oauth");
+  }
+  if (keys.twitterSecret.length == 0) {
+    console.error("Missing twitterSecret for Oauth");
+  }
+}])
+
 .run(['$ionicPlatform', 'firebase', function($ionicPlatform, firebase) {
   $ionicPlatform.ready(function() {
     if(window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
@@ -67,7 +79,6 @@ var ionicApp = angular.module('app', [
   });
 
   $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
-    console.log("error")
     $ionicLoading.hide();
     // We can catch the error thrown when the $requireSignIn promise is rejected
     // and redirect the user back to the home page
@@ -75,6 +86,7 @@ var ionicApp = angular.module('app', [
       console.error('not authenticated');
       $state.go('login');
     } else {
+      console.log("state change error")
       $state.go('error');
     }
   });
