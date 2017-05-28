@@ -11,6 +11,10 @@
   max-width: 100%;
 }
 
+.card, .list-inset {
+  background-color: transparent !important;
+}
+
 /* Overwrite default ionic scroll bar behavior */
 /*
 .overflow-scroll {
@@ -23,7 +27,53 @@
   background-color: #222;
 }
 
-/* Logo style */
+/* Login page */
+.background-color {
+  background-color: #55ef44;
+}
+
+.login {
+  position: fixed;
+  bottom: 100px;
+  width: 100%;
+  background-color: rgba(255,255,255,0.7);
+  padding: 20px 10px;
+}
+
+@media only screen and (min-width : 500px) {
+  .login {
+    left: calc((100% - 480px) / 2);
+    width: 480px;
+    border-radius: 5px;
+  }
+}
+
+.login-title {
+  color: white;
+  font-size: 48px;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.65);
+}
+
+/* Logo styles */
+.logo-container {
+  /*padding-top: 20%;*/
+}
+
+.main-logo {
+  max-width: 70%;
+  padding-top: 15%;
+}
+
+@media only screen and (min-width : 500px) {
+  /* For larger devices, just keep the max of the logo at 600px wide (70% * 600px)
+    This prevents the nasty snap effect when draggging a window on desktop */
+  .main-logo {
+    max-width: calc(0.7 * 500px);
+    padding-top: 72px; 
+  }
+}
+
 .logo {
   margin-right: 10px;
   max-height: 30px;

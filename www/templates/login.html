@@ -3,7 +3,7 @@
     <h1 class="title">GiffingAwesome</h1>
   </header>
 
-  <ion-content class="has-header">
+  <ion-content class="has-header background-color">
     <div ng-show="auth.authData">
       <h1>You are logged in!</h1>
       <p>Hello, {{auth.authData.displayName}}</p>
@@ -11,11 +11,15 @@
       <button class="button button-block button-dark" ng-click="auth.$signOut()">Logout</button>
     </div>
     <div ng-hide="auth.authData">
-      <h1 class="text-center padding">Welcome to GiffingAwesome! Please log in to start.</h1>
+      <div class="logo-container text-center">
+        <img class="main-logo" src="img/logos/giffing_awesome.png" alt="giffingawesome logo">
+      </div>
 
+    <div class="login">
+      <h1 class="login-title text-center padding">Let's get started!</h1>
       <div class="list list-inset">
-        <button class="button button-block icon-left ion-social-twitter button-calm" ng-click="$parent.login('twitter')"> Login With Twitter</button>
-        <button class="button button-block icon-left ion-social-google button-assertive" ng-click="$parent.login('google')"> Login With Google</button>
+        <button class="button button-block icon-left ion-social-twitter button-calm" ng-click="$parent.login('twitter')"> Sign In With Twitter</button>
+        <button class="button button-block icon-left ion-social-google button-assertive" ng-click="$parent.login('google')"> Sign In With Google</button>
       </div>
     </div>
   </ion-content>
