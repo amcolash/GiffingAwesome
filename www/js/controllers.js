@@ -357,7 +357,8 @@ angular.module('app.controllers', [])
   }
 
   $scope.setupPreview = function(image) {
-    $scope.Preview.scope.url = image.originalImgUrl;
+    $scope.Preview.scope.image = image;
+    $scope.Preview.scope.parentScope = $scope;
     $scope.Preview.show();
   }
 
@@ -520,7 +521,8 @@ angular.module('app.controllers', [])
   }
 
   $scope.setupPreview = function(image) {
-    $scope.Preview.scope.url = image.originalImgUrl;
+    $scope.Preview.scope.image = image;
+    $scope.Preview.scope.parentScope = $scope;
     $scope.Preview.show();
   }
 
@@ -543,100 +545,6 @@ angular.module('app.controllers', [])
   }
 
 }])
-
-// .controller('MenuController', ['$scope', 'Auth', 'previewData', '$ionicModal', 'Favorites', 'Storage',
-//   function($scope, Auth, previewData, $ionicModal, Favorites, Storage) {
-//   $scope.auth = Auth;
-//   $scope.Favorites = Favorites;
-//   $scope.storage = Storage;
-//
-//   // $scope.preview = previewData;
-//   $scope.customGif = { imgUrl: '', tags: [], failed: false};
-//   $scope.year = new Date().getFullYear();
-//   $scope.customType = 'upload';
-//   $scope.uploadProgress = 0;
-//
-//   $ionicModal.fromTemplateUrl('templates/custom-gif.html', {
-//     scope: $scope,
-//     animation: 'slide-in-up'
-//   }).then(function(modal) {
-//     $scope.modal = modal;
-//   });
-//   $scope.openModal = function() {
-//     $scope.modal.show();
-//   };
-//   // Reset modal on hide
-//   $scope.$on('modal.hidden', function() {
-//     $scope.customGif = { imgUrl: '', tags: [], failed: false };
-//   });
-//   // Cleanup the modal when we're done with it!
-//   $scope.$on('$destroy', function() {
-//     $scope.modal.remove();
-//   });
-//
-//   $scope.addCustomGif = function() {
-//     console.log($scope.customType);
-//     if ($scope.customType === 'link') {
-//       if ($scope.customGif.imgUrl !== "") {
-//         var image = {
-//           imgUrl: $scope.customGif.imgUrl,
-//           hqImgUrl: $scope.customGif.imgUrl,
-//           originalImgUrl: $scope.customGif.imgUrl,
-//           favorite: true,
-//           tags: $scope.customGif.tags
-//         }
-//         $scope.Favorites.addFavorite(image);
-//
-//         $scope.modal.hide();
-//       } else {
-//         console.error("No url given!");
-//       }
-//     } else {
-//       if ($scope.files !== undefined) {
-//         $scope.uploadCustomGif();
-//       } else {
-//         console.error("No file selected to upload!");
-//       }
-//     }
-//   };
-//
-//   $scope.uploadCustomGif = function() {
-//     var file = $scope.files[0];
-//     var name = new Date().getTime().toString() + '.' + file.name.split('.').pop();
-//     var uploadTask = $scope.storage().child(name).put(file);
-//
-//     uploadTask.on('state_changed', function(snapshot) {
-//       // Observe state change events such as progress, pause, and resume
-//       $scope.uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-//       $scope.$apply();
-//     }, function(error) {
-//       // Handle unsuccessful uploads
-//     }, function() {
-//       // Handle successful uploads
-//       var downloadURL = uploadTask.snapshot.downloadURL;
-//       // Remove token from the url
-//       downloadURL = downloadURL.substring(0, downloadURL.indexOf('&token'));
-//
-//       // TODO: Save url without auth, maybe it expires?
-//       var image = {
-//         imgUrl: downloadURL,
-//         hqImgUrl: downloadURL,
-//         originalImgUrl: downloadURL,
-//         filename: name,
-//         favorite: true,
-//         tags: $scope.customGif.tags
-//       }
-//
-//       $scope.Favorites.addFavorite(image);
-//       $scope.files = [];
-//
-//       $scope.uploadProgress = 0;
-//       $scope.modal.hide();
-//     });
-//   }
-//
-// }])
-
 
 .controller('SettingsController', ['$scope', 'Settings', 'Auth', 'Credentials', function($scope, Settings, Auth, Credentials) {
 

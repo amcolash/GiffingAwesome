@@ -5,16 +5,26 @@
   </ion-header-bar>
   <ion-content>
     <div class="center">
-      <div>
-        <a href="{{url}}">
-          <img class="responsive-img padding-bottom" ng-src="{{url}}" alt="Preview"/>
+      <div class="text-center">
+        <a href="{{image.originalImgUrl}}">
+          <img class="responsive-img margin" ng-src="{{image.originalImgUrl}}" alt="Preview"/>
         </a>
 
-        <div class="item item-input-inset">
+        <div class="item item-input-inset margin">
           <label class="item-input-wrapper">
-            <input id="url" type="text" value="{{url}}" onClick="this.setSelectionRange(0, this.value.length);" readonly/>
+            <input id="url" type="text" value="{{image.originalImgUrl}}" onClick="this.setSelectionRange(0, this.value.length);" readonly/>
           </label>
-          <button class="button button-icon icon ion-clipboard" clipboard text="url"></button>
+        </div>
+
+        <tags-input class="margin-extra" ng-show="image.favorite" ng-model="image.tags" on-tag-added="parentScope.updateTags({image: image, tag: $tag})" on-tag-removed="parentScope.updateTags({image: image, tag: $tag})"></tags-input>
+
+        <div class="text-center">
+          <button class="button icon margin" ng-click="parentScope.onFavorite(image)"
+          ng-class="image.favorite ? 'ion-android-star' : 'ion-android-star-outline'"></button>
+          <a class="no-underline" target="_self" ng-href="{{image.originalImgUrl}}" download>
+            <button class="button icon ion-archive margin"></button>
+          </a>
+          <button class="button icon ion-clipboard margin" clipboard text="image.originalImgUrl"></button>
         </div>
       </div>
     </div>

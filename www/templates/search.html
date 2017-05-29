@@ -50,17 +50,17 @@
     </div>
 
     <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'>
-      <div class="grid-item card" ng-repeat="image in images" ng-hide="image.failed">
+      <div class="grid-item" ng-repeat="image in images" ng-hide="image.failed">
         <img ng-src="{{$parent.hq ? ($parent.animate || image.preview || !image.hqThumbnailUrl ? image.hqImgUrl : image.hqThumbnailUrl) : ($parent.animate || image.preview || !image.thumbnailUrl ? image.imgUrl : image.thumbnailUrl)}}" ng-click="setupPreview(image)" ng-mouseenter="image.preview = true" ng-mouseleave="image.preview = false" gridonload imageonerror/>
         <tags-input ng-show="image.favorite" ng-model="image.tags" on-tag-added="updateTags({image: image, tag: $tag})" on-tag-removed="updateTags({image: image, tag: $tag})"></tags-input>
-        <div class="row">
-          <div class="col">
-            <button class="button icon" ng-click="onFavorite(image)"
-              ng-class="image.favorite ? 'ion-android-star' : 'ion-android-star-outline'"></button>
-          </div>
-          <div class="col">
-            <button class="button icon ion-clipboard" clipboard text="image.originalImgUrl"></button>
-          </div>
+
+        <div>
+          <button class="button icon" ng-click="onFavorite(image)"
+          ng-class="image.favorite ? 'ion-android-star' : 'ion-android-star-outline'"></button>
+          <a class="no-underline" target="_self" ng-href="{{image.originalImgUrl}}" download>
+            <button class="button icon ion-archive"></button>
+          </a>
+          <button class="button icon ion-clipboard" clipboard text="image.originalImgUrl"></button>
         </div>
       </div>
     </div>

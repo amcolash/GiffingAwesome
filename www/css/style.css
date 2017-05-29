@@ -7,24 +7,41 @@
 }
 
 .responsive-img {
-  max-height: 100%;
-  max-width: 100%;
+  max-height: 70%;
+  max-width: 70%;
 }
 
 .card, .list-inset {
   background-color: transparent !important;
 }
 
+.no-underline {
+  text-decoration: none;
+}
+
+.margin {
+  margin: 6px;
+}
+
+.margin-extra {
+  margin: 16px;
+}
+
 /* Overwrite default ionic scroll bar behavior */
-/*
 .overflow-scroll {
   overflow-y: auto;
 }
-*/
 
-/* Slightly darker header / footer */
-.bar.bar-dark {
-  background-color: #222;
+/* Override default modal sizing */
+@media (min-width: 680px) {
+  .modal {
+    top: 15%;
+    right: 15%;
+    bottom: 15%;
+    left: 15%;
+    min-height: 240px;
+    width: 70%;
+  }
 }
 
 /* Login page */
@@ -36,7 +53,7 @@
   position: fixed;
   bottom: 100px;
   width: 100%;
-  background-color: rgba(255,255,255,0.7);
+  background-color: black rgba(255,255,255,0.7);
   padding: 20px 10px;
 }
 
@@ -52,7 +69,7 @@
   color: white;
   font-size: 48px;
   font-weight: bold;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.65);
+  text-shadow: 1px 2px 2px rgba(0,0,0,0.5);
 }
 
 /* Logo styles */
@@ -70,7 +87,7 @@
     This prevents the nasty snap effect when draggging a window on desktop */
   .main-logo {
     max-width: calc(0.7 * 500px);
-    padding-top: 72px; 
+    padding-top: 72px;
   }
 }
 
@@ -112,13 +129,13 @@ progress {
 
 .grid-item {
   display: inline-block;
-  padding: 0.5em;
+  margin: 0.5em 0.5em;
   text-align: center;
-  max-width: 25em;
+  max-width: 350px;
 }
 
 .grid-item img {
-  height: 10em;
+  max-height: 150px;
   cursor: pointer;
 }
 
