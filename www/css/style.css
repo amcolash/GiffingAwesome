@@ -27,6 +27,15 @@
   margin: 16px;
 }
 
+.loading-background {
+  background-image: url("../img/loading.svg");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 50px 50px;
+  min-width: 50px;
+  min-height: 50px;
+}
+
 /* Overwrite default ionic scroll bar behavior */
 .overflow-scroll {
   overflow-y: auto;
