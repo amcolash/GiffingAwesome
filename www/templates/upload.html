@@ -14,13 +14,13 @@
         <i class="icon ion-trash-a" ng-click="removeFile(file)"></i>
       </ion-item>
 
-      <label class="button button-full button-dark file-upload">
+      <label class="button button-full button-balanced file-upload">
         <i class="icon ion-upload placeholder-icon"></i>
         {{$parent.$parent.$parent.files ? $parent.$parent.$parent.files[0].name : "Choose File"}}
         <input type="file" class="file-input" file-input="$parent.$parent.$parent.files"/>
       </label>
 
-      <button class="button button-full button-dark" ng-click="uploadFile()">Add</button>
+      <button class="button button-full button-balanced" ng-click="uploadFile()">Add</button>
 
       <div class="padding center" ng-show="$parent.uploadProgress > 0 && $parent.uploadProgress < 100">
         <ion-spinner></ion-spinner>
@@ -28,7 +28,7 @@
       <progress ng-show="$parent.uploadProgress > 0 && $parent.uploadProgress < 100" ng-value="$parent.uploadProgress" max="100"></progress>
     </div>
 
-    <ion-footer-bar ng-show="$parent.showSuccess" align-title="center" class="bar-positive">
+    <ion-footer-bar ng-show="$parent.showSuccess" align-title="center" class="bar-balanced">
       Upload successful
     </ion-footer-bar>
     <ion-footer-bar ng-show="$parent.showError" align-title="center" class="bar-assertive">

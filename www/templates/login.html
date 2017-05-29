@@ -1,18 +1,15 @@
 <ion-view title="GiffingAwesome - Login">
-  <header class="bar bar-header bar-dark">
-    <h1 class="title">GiffingAwesome</h1>
-  </header>
 
-  <ion-content class="has-header background-color">
+  <ion-content class="background-color">
     <div ng-show="auth.authData">
       <h1>You are logged in!</h1>
       <p>Hello, {{auth.authData.displayName}}</p>
       <p>uid: {{auth.authData.uid}}</p>
-      <button class="button button-block button-dark" ng-click="auth.$signOut()">Logout</button>
+      <button class="button button-block button-balanced" ng-click="auth.$signOut()">Logout</button>
     </div>
     <div ng-hide="auth.authData">
       <div class="logo-container text-center">
-        <img class="main-logo" src="img/logos/giffing_awesome.png" alt="giffingawesome logo">
+        <img class="main-logo" src="img/logos/giffing_awesome_full.png" alt="giffingawesome logo">
       </div>
 
     <div class="login">
@@ -24,7 +21,7 @@
     </div>
   </ion-content>
 
-  <footer class="bar bar-footer bar-dark" ng-hide="images.length > 0">
+  <footer class="bar bar-footer bar-dark">
     <div class="title">
       <img class="logo middle" src="img/logos/giphy.png" alt="giphy logo">
       <img class="logo middle" src="img/logos/gifme.png" alt="gieme logo">

@@ -87,7 +87,7 @@
 }
 
 .main-logo {
-  max-width: 70%;
+  max-width: 80%;
   padding-top: 15%;
 }
 
@@ -95,7 +95,7 @@
   /* For larger devices, just keep the max of the logo at 600px wide (70% * 600px)
     This prevents the nasty snap effect when draggging a window on desktop */
   .main-logo {
-    max-width: calc(0.7 * 500px);
+    max-width: calc(0.8 * 500px);
     padding-top: 72px;
   }
 }
