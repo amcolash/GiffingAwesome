@@ -4,7 +4,7 @@ angular.module('app.factories', [])
   return function(authMethod) {
     var deferred = $q.defer();
     // Redirect login method
-    if(ionic.Platform.isAndroid()) {
+    if(ionic.Platform.isAndroid() && window.cordova) {
       if(authMethod === "google") {
         window.plugins.googleplus.login({
     	  'offline': true,

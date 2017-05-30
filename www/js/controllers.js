@@ -212,7 +212,7 @@ angular.module('app.controllers', [])
 
   // run changeSearch each time the view is entered - that way, favorites are synced
   $scope.$on('$ionicView.enter', function() {
-    $scope.mobile = (ionic.Platform.isAndroid() || ionic.Platform.isIOS() || ionic.Platform.isWindowsPhone()) && !ionic.Platform.is('tablet');
+    $scope.mobile = ionic.Platform.isAndroid() || ionic.Platform.isIOS() || ionic.Platform.isWindowsPhone();
     $scope.animate = !$scope.mobile;
     $scope.limit = $scope.mobile ? $scope.mobileLimit : $scope.desktopLimit;
 
@@ -406,7 +406,7 @@ angular.module('app.controllers', [])
   $scope.regen = false;
 
   $scope.$on('$ionicView.enter', function() {
-    $scope.mobile = (ionic.Platform.isAndroid() || ionic.Platform.isIOS() || ionic.Platform.isWindowsPhone()) && !ionic.Platform.is('tablet');
+    $scope.mobile = ionic.Platform.isAndroid() || ionic.Platform.isIOS() || ionic.Platform.isWindowsPhone();
     $scope.animate = !$scope.mobile;
   });
 
@@ -604,7 +604,7 @@ angular.module('app.controllers', [])
     console.log($scope.auth)
 
     $scope.credentials(authMethod).then(function(credential) {
-      if (ionic.Platform.isAndroid()) {
+      if (ionic.Platform.isAndroid() && window.cordova) {
         $scope.auth.$getAuth().link(credential).then(function(result) {
           console.log("Success linking: " + authMethod);
           $scope.updateProviders();
@@ -648,7 +648,8 @@ angular.module('app.controllers', [])
 
   $scope.login = function(authMethod) {
     $scope.credentials(authMethod).then(function(credentials) {
-      if (ionic.Platform.isAndroid()) {
+      console;
+      if (ionic.Platform.isAndroid() && window.cordova) {
         $scope.auth.$signInWithCredential(credentials);
       } else {
         $scope.auth.$signInWithPopup(credentials);
