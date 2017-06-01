@@ -170,8 +170,14 @@ progress {
 }
 
 .grid-item img {
-  height: 150px;
+  max-height: 100px;
   cursor: pointer;
+}
+
+@media (min-width: 680px) {
+  .grid-item img {
+    max-height: 150px;
+  }
 }
 
 .grid-item .col {
