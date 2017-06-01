@@ -21,7 +21,7 @@
         <div class="text-center">
           <button class="button icon margin" ng-click="parentScope.onFavorite(image)"
           ng-class="image.favorite ? 'ion-android-star' : 'ion-android-star-outline'"></button>
-          <a class="no-underline" target="_self" ng-href="{{image.originalImgUrl}}" download>
+          <a ng-hide="$parent.ios" class="no-underline" target="_self" ng-href="{{image.originalImgUrl}}" download>
             <button class="button icon ion-archive margin"></button>
           </a>
           <button class="button icon ion-clipboard margin" clipboard text="image.originalImgUrl"></button>

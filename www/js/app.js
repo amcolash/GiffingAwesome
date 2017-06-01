@@ -4,16 +4,22 @@
 // 'app' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 var ionicApp = angular.module('app', [
+  // Base includes
   'ionic',
   'firebase',
+
+  // App
   'app.controllers',
   'app.directives',
   'app.factories',
   'app.keys',
+
+  // Other dependencies
   'angular-clipboard',
+  'angular-inview',
   'file-model',
+  'ngCordovaOauth',
   'ngTagsInput',
-  'ngCordovaOauth'
 ])
 
 .run(['keys', function(keys) {

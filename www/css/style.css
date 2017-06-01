@@ -36,6 +36,12 @@
   min-height: 50px;
 }
 
+/* Border on menu button */
+.button.button-icon.ion-navicon {
+  border: white 1px solid;
+  padding: 0 6px;
+}
+
 /* Overwrite default ionic scroll bar behavior */
 .overflow-scroll {
   overflow-y: auto;
@@ -164,7 +170,7 @@ progress {
 }
 
 .grid-item img {
-  max-height: 150px;
+  height: 150px;
   cursor: pointer;
 }
 

@@ -14,22 +14,22 @@
       </div>
 
       <div class="list list-inset">
-        <ion-toggle ng-model="$parent.hq" toggle-class="toggle-calm">High Quality</ion-toggle>
+        <ion-toggle ng-model="$parent.hq" toggle-class="toggle-balanced">High Quality</ion-toggle>
       </div>
       <div class="list list-inset">
-        <ion-toggle ng-model="$parent.animate" toggle-class="toggle-calm">Automatically Play Gifs</ion-toggle>
+        <ion-toggle ng-model="$parent.animate" toggle-class="toggle-balanced">Automatically Play Gifs</ion-toggle>
       </div>
     </div>
 
     <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'>
       <div class="grid-item" ng-repeat="image in Favorites.getFavorites() | filter:$parent.search">
-        <img ng-src="{{$parent.hq ? ($parent.animate || image.preview || !image.hqThumbnailUrl ? image.hqImgUrl : image.hqThumbnailUrl) : ($parent.animate || image.preview || !image.thumbnailUrl ? image.imgUrl : image.thumbnailUrl)}}" ng-click="setupPreview(image)" ng-mouseenter="image.preview = true" ng-mouseleave="image.preview = false" gridonload imageonerror/>
-        <tags-input ng-model="image.tags" on-tag-added="updateTags({image: image, tag: $tag})" on-tag-removed="updateTags({image: image, tag: $tag})"></tags-input>
+        <img ng-src="{{$parent.hq ? (image.visible && ($parent.animate || image.preview || !image.hqThumbnailUrl) ? image.hqImgUrl : image.hqThumbnailUrl) : (image.visible && ($parent.animate || image.preview || !image.thumbnailUrl) ? image.imgUrl : image.thumbnailUrl)}}" ng-click="setupPreview(image)" ng-mouseenter="image.preview = true" ng-mouseleave="image.preview = false" in-view="image.visible = $inview" gridonload imageonerror/>
+        <tags-input ng-model="image.tags" on-tag-added="Favorites.updateTags({image: image, tag: $tag})" on-tag-removed="Favorites.updateTags({image: image, tag: $tag})"></tags-input>
 
         <div>
-          <button class="button icon" ng-click="onFavorite(image)"
+          <button class="button icon" ng-click="Favorites.onFavorite(image)"
           ng-class="image.favorite ? 'ion-android-star' : 'ion-android-star-outline'"></button>
-          <a class="no-underline" target="_self" ng-href="{{image.originalImgUrl}}" download>
+          <a ng-hide="$parent.ios" class="no-underline" target="_self" ng-href="{{image.originalImgUrl}}" download>
             <button class="button icon ion-archive"></button>
           </a>
           <button class="button icon ion-clipboard" clipboard text="image.originalImgUrl"></button>

@@ -201,6 +201,8 @@ angular.module('app.controllers', [])
   $scope.searchtype = 'Search';
   $scope.hq = false;
   $scope.mobile = false;
+  $scope.ios = false;
+  $scope.android = false;
   $scope.animate = true;
   $scope.search = '';
 
@@ -213,6 +215,8 @@ angular.module('app.controllers', [])
   // run changeSearch each time the view is entered - that way, favorites are synced
   $scope.$on('$ionicView.enter', function() {
     $scope.mobile = ionic.Platform.isAndroid() || ionic.Platform.isIOS() || ionic.Platform.isWindowsPhone();
+    $scope.ios = ionic.Platform.isIOS();
+    $scope.android = ionic.Platform.isAndroid();
     $scope.animate = !$scope.mobile;
     $scope.limit = $scope.mobile ? $scope.mobileLimit : $scope.desktopLimit;
 
@@ -251,7 +255,6 @@ angular.module('app.controllers', [])
               hqImgUrl: data[i].images.fixed_height.url,
               hqThumbnailUrl: data[i].images.fixed_height_still.url,
               originalImgUrl: data[i].images.original.url,
-              preview: false
             }
             img.favorite = $scope.Favorites.isFavorite(img);
             img.tags = $scope.Favorites.getTags(img);
@@ -289,7 +292,6 @@ angular.module('app.controllers', [])
               hqImgUrl: data[i].link,
               hqThumbnailUrl: data[i].thumb,
               originalImgUrl: data[i].link,
-              preview: false
             }
             img.favorite = $scope.Favorites.isFavorite(img);
             img.tags = $scope.Favorites.getTags(img);
@@ -323,7 +325,6 @@ angular.module('app.controllers', [])
               hqImgUrl: data[i].media[0].gif.url,
               hqThumbnailUrl: data[i].media[0].gif.preview,
               originalImgUrl: data[i].url,
-              preview: false
             }
             img.favorite = $scope.Favorites.isFavorite(img);
             img.tags = $scope.Favorites.getTags(img);
@@ -357,24 +358,12 @@ angular.module('app.controllers', [])
   }
 
   $scope.setupPreview = function(image) {
+    $scope.Preview.scope.ios = ionic.Platform.isIOS();
+    $scope.Preview.scope.android = ionic.Platform.isAndroid();
     $scope.Preview.scope.image = image;
     $scope.Preview.scope.parentScope = $scope;
     $scope.Preview.show();
   }
-
-  $scope.onFavorite = function(image) {
-    if (!image.favorite) {
-      image.favorite = true;
-      $scope.Favorites.addFavorite(image);
-    } else {
-      image.favorite = false;
-      $scope.Favorites.removeFavorite(image);
-    }
-  }
-
-  $scope.updateTags = function(image) {
-    $scope.Favorites.updateTags(image);
-  };
 }])
 
 .controller('FavoritesController', ['$q', '$scope', 'Favorites', 'Preview', 'Storage',
@@ -400,6 +389,8 @@ angular.module('app.controllers', [])
   });
 
   $scope.mobile = false;
+  $scope.ios = false;
+  $scope.android = false;
   $scope.animate = true;
 
   // debug option to regenerate all favorites thumbnails
@@ -407,6 +398,8 @@ angular.module('app.controllers', [])
 
   $scope.$on('$ionicView.enter', function() {
     $scope.mobile = ionic.Platform.isAndroid() || ionic.Platform.isIOS() || ionic.Platform.isWindowsPhone();
+    $scope.ios = ionic.Platform.isIOS();
+    $scope.android = ionic.Platform.isAndroid();
     $scope.animate = !$scope.mobile;
   });
 
@@ -521,24 +514,12 @@ angular.module('app.controllers', [])
   }
 
   $scope.setupPreview = function(image) {
+    $scope.Preview.scope.ios = ionic.Platform.isIOS();
+    $scope.Preview.scope.android = ionic.Platform.isAndroid();
     $scope.Preview.scope.image = image;
     $scope.Preview.scope.parentScope = $scope;
     $scope.Preview.show();
   }
-
-  $scope.onFavorite = function(image) {
-    if (!image.favorite) {
-      image.favorite = true;
-      $scope.Favorites.addFavorite(image);
-    } else {
-      image.favorite = false;
-      $scope.Favorites.removeFavorite(image);
-    }
-  }
-
-  $scope.updateTags = function(image) {
-    $scope.Favorites.updateTags(image);
-  };
 
   $scope.clearSearch = function() {
     $scope.search = '';

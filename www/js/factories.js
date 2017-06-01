@@ -85,6 +85,7 @@ angular.module('app.factories', [])
           getFavorites: getFavorites,
           isFavorite: isFavorite,
           getTags: getTags,
+          onFavorite: onFavorite
         });
       });
     }
@@ -169,6 +170,16 @@ angular.module('app.factories', [])
       }
     }
     return [];
+  }
+
+  function onFavorite(image) {
+    if (!image.favorite) {
+      image.favorite = true;
+      addFavorite(image);
+    } else {
+      image.favorite = false;
+      removeFavorite(image);
+    }
   }
 
   return deferred.promise;
