@@ -9,7 +9,7 @@
       <div class="list list-inset" ng-show="$parent.searchtype != 'Trending'">
         <div class="item item-input">
           <i class="icon ion-search placeholder-icon"></i>
-          <input type="text" ng-model="$parent.search" ng-change="changeSearch()" ng-model-options='{ debounce: 500 }' placeholder="Search">
+          <input type="text" ng-model="$parent.search" ng-change="changeSearch()" ng-model-options='{ debounce: 500 }' placeholder="Search" returnclose>
           <button ng-if="$parent.search.length" class="button-icon input-button placeholder-icon ion-close" ng-click="clearSearch()">
         </div>
       </div>
