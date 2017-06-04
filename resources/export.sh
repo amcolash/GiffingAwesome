@@ -15,4 +15,7 @@ rm ../www/img/icons/*
 # Copy new versions of icons
 cp android/icon/* ../www/img/icons/
 
+cp android/splash/drawable-land-xxhdpi-screen.png ../www/img/splash/splash-land.png
+cp android/splash/drawable-port-xxhdpi-screen.png ../www/img/splash/splash-port.png
+
 cp full_logo_transparent.png ../www/img/logos/giffing_awesome_full.png
