@@ -37,10 +37,10 @@
 }
 
 /* Border on menu button */
-.button.button-icon.ion-navicon {
+/*.button.button-icon.ion-navicon {
   border: white 1px solid;
   padding: 0 6px;
-}
+}*/
 
 /* Overwrite default ionic scroll bar behavior */
 .overflow-scroll {
