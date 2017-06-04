@@ -23,7 +23,7 @@
 
     <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'>
       <div class="grid-item" ng-repeat="image in Favorites.getFavorites() | filter:$parent.search">
-        <img ng-src="{{$parent.hq ? (image.visible && ($parent.animate || image.preview || !image.hqThumbnailUrl) ? image.hqImgUrl : image.hqThumbnailUrl) : (image.visible && ($parent.animate || image.preview || !image.thumbnailUrl) ? image.imgUrl : image.thumbnailUrl)}}" ng-click="setupPreview(image)" ng-mouseenter="image.preview = true" ng-mouseleave="image.preview = false" in-view="image.visible = $inview" gridonload imageonerror/>
+        <img class="pointer" ng-src="{{$parent.hq ? (image.visible && ($parent.animate || image.preview || !image.hqThumbnailUrl) ? image.hqImgUrl : image.hqThumbnailUrl) : (image.visible && ($parent.animate || image.preview || !image.thumbnailUrl) ? image.imgUrl : image.thumbnailUrl)}}" ng-click="setupPreview(image)" ng-mouseenter="image.preview = true" ng-mouseleave="image.preview = false" in-view="image.visible = $inview" gridonload imageonerror/>
         <tags-input ng-model="image.tags" on-tag-added="Favorites.updateTags({image: image, tag: $tag})" on-tag-removed="Favorites.updateTags({image: image, tag: $tag})"></tags-input>
 
         <div>

@@ -118,68 +118,6 @@ angular.module('app.controllers', [])
       });
     }
   };
-
-
-  // $scope.uploadFile = function() {
-  //   if ($scope.files !== undefined) {
-  //     // Make the progress bar show up at the beginning of the upload
-  //     $scope.uploadProgress = 5;
-  //
-  //     var file = $scope.files[0];
-  //     var originalName = file.name;
-  //     var name = new Date().getTime().toString() + '.' + file.name.split('.').pop();
-  //     var uploadTask = $scope.storage.child(name).put(file);
-  //
-  //     uploadTask.on('state_changed', function(snapshot) {
-  //       // Observe state change events such as progress, pause, and resume
-  //       $scope.uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-  //       $scope.$apply();
-  //     }, function(error) {
-  //       // Handle unsuccessful uploads
-  //       $scope.showError = true;
-  //       console.error(error);
-  //     }, function() {
-  //       // Handle successful uploads
-  //       var dateObj = new Date();
-  //
-  //       var file = {
-  //         date: dateObj.toDateString(),
-  //         time: dateObj.toTimeString(),
-  //         name: name,
-  //         original: originalName,
-  //         url: uploadTask.snapshot.downloadURL,
-  //       }
-  //
-  //       console.log("upload complete");
-  //
-  //       $scope.fileList.$add(file);
-  //       $scope.showSuccess = true;
-  //     })
-  //
-  //     uploadTask.then(function() {
-  //       $scope.uploadProgress = 0;
-  //
-  //       $timeout(function() {
-  //         $scope.showSuccess = false;
-  //         $scope.showError = false;
-  //       }, 3500);
-  //     })
-  //
-  //
-  //   } else {
-  //     console.error("No file selected to upload!");
-  //   }
-  // }
-  //
-  // $scope.removeFile = function(file) {
-  //   var name = file.name;
-  //   var uploadTask = $scope.storage.child(name).delete().then(function() {
-  //     console.log("successfully removed file");
-  //     $scope.fileList.$remove(file);
-  //   }).catch(function(error) {
-  //     console.error(error);
-  //   });
-  // }
 }])
 
 .controller('SearchController', ['$scope', '$http', 'Favorites', 'Preview', 'Settings',
@@ -201,6 +139,7 @@ angular.module('app.controllers', [])
   $scope.searchtype = 'Search';
   $scope.hq = false;
   $scope.mobile = false;
+  $scope.expanded = true;
   $scope.ios = false;
   $scope.android = false;
   $scope.animate = true;
@@ -218,6 +157,7 @@ angular.module('app.controllers', [])
     $scope.ios = ionic.Platform.isIOS();
     $scope.android = ionic.Platform.isAndroid();
     $scope.animate = !$scope.mobile;
+    $scope.expanded = !$scope.mobile;
     $scope.limit = $scope.mobile ? $scope.mobileLimit : $scope.desktopLimit;
 
     $scope.changeSearch();
