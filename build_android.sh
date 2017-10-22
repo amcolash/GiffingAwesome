@@ -13,7 +13,8 @@ printf "[BUILD] Zipalign\n"
 zipalign -v -p 4 $BUILD_DIR/android-release-unsigned.apk $BUILD_DIR/android-release-unsigned-aligned.apk
 
 printf "[BUILD] Signing final app\n"
-apksigner sign --ks ~/.android/release.jks --out $BUILD_DIR/$RELEASE_NAME $BUILD_DIR/android-release-unsigned-aligned.apk
+#apksigner sign --ks ~/.android/development_cert.der --out $BUILD_DIR/$RELEASE_NAME $BUILD_DIR/android-release-unsigned-aligned.apk
+apksigner sign --ks ~/.android/keystore --out $BUILD_DIR/$RELEASE_NAME $BUILD_DIR/android-release-unsigned-aligned.apk
 
 printf "[BUILD] Verifying apk\n"
 apksigner verify $BUILD_DIR/$RELEASE_NAME
